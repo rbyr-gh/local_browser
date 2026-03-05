@@ -170,7 +170,7 @@ Afin de faciliter la maintenance et le travail collaboratif, le projet devra êt
 
 Exemple de structure :
 
-projet-python-s4/
+local_browser/
 │
 ├── src/
 │   ├── main.py
