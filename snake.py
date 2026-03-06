@@ -2,7 +2,7 @@ from tkinter import *
 import random
 
 fenetre = Tk()
-fenetre.title("Snake Tkinter")
+fenetre.title("Snake")
 fenetre.geometry("600x600")
 
 TAILLE_CASE = 20
