@@ -1,13 +1,8 @@
-from tkinter import *
+from customtkinter import *
 
-# Initialisation de la page 
+app = ctk.CTk()
+app.title("ESEOFOX")
+app.iconbitmap("IconBitMap_ESEOFOX.ico")
+app.configure(fg_color="#c4c4c4")
 
-fenetre = Tk()
-fenetre.title("ESEOFOX")
-fenetre.iconbitmap("IconBitMap_ESEOFOX.ico")
-fenetre.config(background= "#c4c4c4")
-
-
-
-
-fenetre.mainloop()
+app.mainloop()
