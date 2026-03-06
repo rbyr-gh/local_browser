@@ -1,5 +1,9 @@
 import customtkinter as ctk
+from PIL import Image
 
+# Initialisation des constantes
+color_background_light = "#eeeeee"
+color_background_dark = "#242429"
 # Configuration globale
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
@@ -46,13 +50,24 @@ class App(ctk.CTk):
         # --- 2. ZONE DE CONTENU (Droite) ---
         self.content_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.content_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
+        self.content_frame.grid_rowconfigure(2, weight=1) 
+        self.content_frame.grid_columnconfigure(0, weight=1) 
 
-        # Label de bienvenue (contenu par défaut)
-        self.welcome_label = ctk.CTkLabel(self.content_frame, text="Bienvenue sur l'Accueil", 
-                                          font=ctk.CTkFont(size=24))
-        self.welcome_label.pack(pady=50)
+        # Label de bienvenue
+        self.welcome_label = ctk.CTkLabel(self.content_frame, text="Bienvenue sur l'Accueil", font=ctk.CTkFont(size=24))
+        self.welcome_label.grid(row=0, column=0, sticky="nsew")
+
+        # Label d'applications 
+        self.app_label = ctk.CTkLabel(self.content_frame,text="Applications : ",font=ctk.CTkFont(size=16))
+        self.app_label.grid(row=1, column=0, padx=10, pady=10, sticky="w")
+
+        # Logo App
+        chronoImage = ctk.CTkImage(light_image=Image.open("Chrono.png"), size=(30, 30))
+        button = ctk.CTkButton(self.content_frame, image=chronoImage, text="", fg_color= "#232329")
+        button.grid(row=2, column=0, padx=10, pady=10, sticky="w")
 
     # --- Fonctions de gestion du thème ---
+
     def switch_theme_event(self):
         if ctk.get_appearance_mode() == "Dark":
             ctk.set_appearance_mode("Light")
@@ -62,13 +77,16 @@ class App(ctk.CTk):
     # --- Fonctions de navigation (Simulation) ---
     def show_home(self):
         self.welcome_label.configure(text="Bienvenue sur l'Accueil")
+        self.app_label.configure(text ="Applications : ")
         # Ici, vous pourriez effacer le frame et ajouter d'autres widgets
 
     def show_settings(self):
         self.welcome_label.configure(text="Page des Paramètres")
+        self.app_label.configure(text ="Réglages : ")
 
     def show_help(self):
         self.welcome_label.configure(text="Page d'Aide")
+        self.app_label.configure(text ="Nos Services : ")
 
 if __name__ == "__main__":
     app = App()
