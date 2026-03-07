@@ -50,21 +50,45 @@ class App(ctk.CTk):
         # --- 2. ZONE DE CONTENU (Droite) ---
         self.content_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.content_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
-        self.content_frame.grid_rowconfigure(2, weight=1) 
-        self.content_frame.grid_columnconfigure(0, weight=1) 
+        self.content_frame.grid_rowconfigure(3, weight=1) 
+        self.content_frame.grid_columnconfigure(2, weight=1) 
 
         # Label de bienvenue
         self.welcome_label = ctk.CTkLabel(self.content_frame, text="Bienvenue sur l'Accueil", font=ctk.CTkFont(size=24))
-        self.welcome_label.grid(row=0, column=0, sticky="nsew")
+        self.welcome_label.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
         # Label d'applications 
         self.app_label = ctk.CTkLabel(self.content_frame,text="Applications : ",font=ctk.CTkFont(size=16))
         self.app_label.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
         # Logo App
-        chronoImage = ctk.CTkImage(light_image=Image.open("Chrono.png"), size=(30, 30))
-        button = ctk.CTkButton(self.content_frame, image=chronoImage, text="", fg_color= "#232329")
-        button.grid(row=2, column=0, padx=10, pady=10, sticky="w")
+        chronoImage = ctk.CTkImage(light_image=Image.open("Chrono_lightmode.png"), dark_image=Image.open("Chrono_darkmode.png"), size=(90, 90))
+        button_chronoImage = ctk.CTkButton(self.content_frame, image=chronoImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_chronoImage.grid(row=2, column=0, padx=40, pady=10)
+
+        snakeImage = ctk.CTkImage(light_image=Image.open("Snake.png"), size=(90, 90))
+        button_snakeImage = ctk.CTkButton(self.content_frame, image=snakeImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_snakeImage.grid(row=2, column=1, padx=40, pady=10)
+
+        notesImage = ctk.CTkImage(light_image=Image.open("Notes.png"), size=(90, 90))
+        button_notesImage = ctk.CTkButton(self.content_frame, image=notesImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_notesImage.grid(row=2, column=2, padx=40, pady=10)
+
+        morpionImage = ctk.CTkImage(light_image=Image.open("Morpion.png"), size=(90, 90))
+        button_morpionImage = ctk.CTkButton(self.content_frame, image=morpionImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_morpionImage.grid(row=3, column=0, padx=40, pady=10)
+
+        contactsImage = ctk.CTkImage(light_image=Image.open("Contacts.png"), size=(90, 90))
+        button_contactsImage = ctk.CTkButton(self.content_frame, image=contactsImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_contactsImage.grid(row=3, column=1, padx=40, pady=10)
+
+        messagesImage = ctk.CTkImage(light_image=Image.open("Messages.png"), size=(90, 90))
+        button_messagesImage = ctk.CTkButton(self.content_frame, image=messagesImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_messagesImage.grid(row=3, column=2, padx=40, pady=10)
+
+        wikiImage = ctk.CTkImage(light_image=Image.open("Wiki.png"), size=(90, 90))
+        button_wikiImage = ctk.CTkButton(self.content_frame, image=wikiImage, text="", fg_color= ("#eeeeee", "#292929"))
+        button_wikiImage.grid(row=4, column=0, padx=40, pady=10)
 
     # --- Fonctions de gestion du thème ---
 
@@ -73,6 +97,7 @@ class App(ctk.CTk):
             ctk.set_appearance_mode("Light")
         else:
             ctk.set_appearance_mode("Dark")
+            
 
     # --- Fonctions de navigation (Simulation) ---
     def show_home(self):
@@ -83,6 +108,7 @@ class App(ctk.CTk):
     def show_settings(self):
         self.welcome_label.configure(text="Page des Paramètres")
         self.app_label.configure(text ="Réglages : ")
+        self.content_frame.configure()
 
     def show_help(self):
         self.welcome_label.configure(text="Page d'Aide")
