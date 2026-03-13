@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
+from snake import *
 
 # Initialisation des constantes
 color_background_light = "#eeeeee"
@@ -70,35 +71,35 @@ class App(ctk.CTk):
         self.app_label.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
         # Logo App
-        chronoImage = ctk.CTkImage(light_image=Image.open("Chrono_lightmode.png"), dark_image=Image.open("Chrono_darkmode.png"), size=(150, 150))
+        chronoImage = ctk.CTkImage(light_image=Image.open("Image/Chrono_lightmode.png"), dark_image=Image.open("Image/Chrono_darkmode.png"), size=(150, 150))
         button_chronoImage = ctk.CTkButton(self.content_frame_accueil, image=chronoImage, text="", fg_color= "transparent", command=self.run_chrono)
         button_chronoImage.grid(row=2, column=0, padx=100, pady=10, sticky="w")
 
-        snakeImage = ctk.CTkImage(light_image=Image.open("Snake.png"), size=(150, 150))
+        snakeImage = ctk.CTkImage(light_image=Image.open("Image/Snake.png"), size=(150, 150))
         button_snakeImage = ctk.CTkButton(self.content_frame_accueil, image=snakeImage, text="", fg_color= "transparent", command=self.run_snake)
         button_snakeImage.grid(row=2, column=1, padx=100, pady=10, sticky="nsew")
 
-        notesImage = ctk.CTkImage(light_image=Image.open("Notes.png"), size=(150, 150))
+        notesImage = ctk.CTkImage(light_image=Image.open("Image/Notes.png"), size=(150, 150))
         button_notesImage = ctk.CTkButton(self.content_frame_accueil, image=notesImage, text="", fg_color= "transparent", command=self.run_notes)
         button_notesImage.grid(row=2, column=2, padx=100, pady=10, sticky="e")
 
-        morpionImage = ctk.CTkImage(light_image=Image.open("Morpion.png"), size=(150, 150))
+        morpionImage = ctk.CTkImage(light_image=Image.open("Image/Morpion.png"), size=(150, 150))
         button_morpionImage = ctk.CTkButton(self.content_frame_accueil, image=morpionImage, text="", fg_color= "transparent", command=self.run_morpion)
         button_morpionImage.grid(row=3, column=0, padx=100, pady=10, sticky="w")
 
-        contactsImage = ctk.CTkImage(light_image=Image.open("Contacts.png"), size=(150, 150))
+        contactsImage = ctk.CTkImage(light_image=Image.open("Image/Contacts.png"), size=(150, 150))
         button_contactsImage = ctk.CTkButton(self.content_frame_accueil, image=contactsImage, text="", fg_color= "transparent", command=self.run_contacts,height=170)
         button_contactsImage.grid(row=3, column=1, padx=100, pady=0, sticky="we")
 
-        messagesImage = ctk.CTkImage(light_image=Image.open("Messages.png"), size=(150, 150))
+        messagesImage = ctk.CTkImage(light_image=Image.open("Image/Messages.png"), size=(150, 150))
         button_messagesImage = ctk.CTkButton(self.content_frame_accueil, image=messagesImage, text="", fg_color= "transparent", command=self.run_messages)
         button_messagesImage.grid(row=3, column=2, padx=100, pady=0, sticky="e")
 
-        wikiImage = ctk.CTkImage(light_image=Image.open("Wiki.png"), size=(150, 150))
+        wikiImage = ctk.CTkImage(light_image=Image.open("Image/Wiki.png"), size=(150, 150))
         button_wikiImage = ctk.CTkButton(self.content_frame_accueil, image=wikiImage, text="", fg_color= "transparent", command=self.run_wiki)
         button_wikiImage.grid(row=4, column=0, padx=100, pady=0, sticky="w")
 
-        calculatriceImage = ctk.CTkImage(light_image=Image.open("Calculatrice.png"), size=(150, 150))
+        calculatriceImage = ctk.CTkImage(light_image=Image.open("Image/Calculatrice.png"), size=(150, 150))
         button_calculatriceImage = ctk.CTkButton(self.content_frame_accueil, image=calculatriceImage, text="", fg_color= "transparent", command=self.run_calculatrice)
         button_calculatriceImage.grid(row=4, column=1, padx=100, pady=10, sticky="nsew")
 
@@ -165,6 +166,14 @@ class App(ctk.CTk):
     def run_calculatrice(self):
         pass
 
+def run_play_navigator():
+    page = "accueil"
+    match page:
+        case 
+
+run_play_navigator()
+
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
