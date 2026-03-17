@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
-from snake import *
+from App_features.snake import snake
 
 # Initialisation des constantes
 color_background_light = "#eeeeee"
@@ -13,18 +13,18 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # Configuration de la fenêtre principale
+        # Paramètre de l'application
         self.title("ESEOFOX") 
         self.attributes('-fullscreen', True)
         
-        # Configuration de la grille (2 colonnes : Menu + Contenu)
+        
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
-
-        # --- 1. CRÉATION DU MENU LATÉRAL (Gauche) ---
+        
+        # Frame de la sidebar
         self.sidebar_frame = ctk.CTkFrame(self, width=200, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(7, weight=1) # Espace flexible en bas
+        self.sidebar_frame.grid_rowconfigure(7, weight=1) 
 
         # Titre du menu
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="ESEOFOX", font=ctk.CTkFont(size=20, weight="bold"))
@@ -51,11 +51,6 @@ class App(ctk.CTk):
         self.switch_theme = ctk.CTkSwitch(self.sidebar_frame, text="Dark/Light", command=self.switch_theme_event)
         self.switch_theme.grid(row=5, column=0, padx=20, pady=10)
 
-
-
-
-
-        # --- 2. ZONE DE CONTENU (Droite) ---
         # FRAME ACCUEIL
         self.content_frame_accueil = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.content_frame_accueil.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
@@ -71,36 +66,36 @@ class App(ctk.CTk):
         self.app_label.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
         # Logo App
-        chronoImage = ctk.CTkImage(light_image=Image.open("Image/Chrono_lightmode.png"), dark_image=Image.open("Image/Chrono_darkmode.png"), size=(150, 150))
-        button_chronoImage = ctk.CTkButton(self.content_frame_accueil, image=chronoImage, text="", fg_color= "transparent", command=self.run_chrono)
+        chronoImage = ctk.CTkImage(light_image=Image.open("Image_app\Chrono_lightmode.png"), dark_image=Image.open("Image_app/Chrono_darkmode.png"), size=(150, 150))
+        button_chronoImage = ctk.CTkButton(self.content_frame_accueil, image=chronoImage, text="", fg_color= "transparent", command=lambda: self.launch_app("chrono"))
         button_chronoImage.grid(row=2, column=0, padx=100, pady=10, sticky="w")
 
-        snakeImage = ctk.CTkImage(light_image=Image.open("Image/Snake.png"), size=(150, 150))
-        button_snakeImage = ctk.CTkButton(self.content_frame_accueil, image=snakeImage, text="", fg_color= "transparent", command=self.run_snake)
+        snakeImage = ctk.CTkImage(light_image=Image.open("Image_app/Snake.png"), size=(150, 150))
+        button_snakeImage = ctk.CTkButton(self.content_frame_accueil, image=snakeImage, text="", fg_color= "transparent", command=lambda: self.launch_app("snake"))
         button_snakeImage.grid(row=2, column=1, padx=100, pady=10, sticky="nsew")
 
-        notesImage = ctk.CTkImage(light_image=Image.open("Image/Notes.png"), size=(150, 150))
-        button_notesImage = ctk.CTkButton(self.content_frame_accueil, image=notesImage, text="", fg_color= "transparent", command=self.run_notes)
+        notesImage = ctk.CTkImage(light_image=Image.open("Image_app/Notes.png"), size=(150, 150))
+        button_notesImage = ctk.CTkButton(self.content_frame_accueil, image=notesImage, text="", fg_color= "transparent", command=lambda: self.launch_app("notes"))
         button_notesImage.grid(row=2, column=2, padx=100, pady=10, sticky="e")
 
-        morpionImage = ctk.CTkImage(light_image=Image.open("Image/Morpion.png"), size=(150, 150))
-        button_morpionImage = ctk.CTkButton(self.content_frame_accueil, image=morpionImage, text="", fg_color= "transparent", command=self.run_morpion)
+        morpionImage = ctk.CTkImage(light_image=Image.open("Image_app/Morpion.png"), size=(150, 150))
+        button_morpionImage = ctk.CTkButton(self.content_frame_accueil, image=morpionImage, text="", fg_color= "transparent", command=lambda: self.launch_app("notes"))
         button_morpionImage.grid(row=3, column=0, padx=100, pady=10, sticky="w")
 
-        contactsImage = ctk.CTkImage(light_image=Image.open("Image/Contacts.png"), size=(150, 150))
-        button_contactsImage = ctk.CTkButton(self.content_frame_accueil, image=contactsImage, text="", fg_color= "transparent", command=self.run_contacts,height=170)
+        contactsImage = ctk.CTkImage(light_image=Image.open("Image_app/Contacts.png"), size=(150, 150))
+        button_contactsImage = ctk.CTkButton(self.content_frame_accueil, image=contactsImage, text="", fg_color= "transparent", command=lambda: self.launch_app("contacts"))
         button_contactsImage.grid(row=3, column=1, padx=100, pady=0, sticky="we")
 
-        messagesImage = ctk.CTkImage(light_image=Image.open("Image/Messages.png"), size=(150, 150))
-        button_messagesImage = ctk.CTkButton(self.content_frame_accueil, image=messagesImage, text="", fg_color= "transparent", command=self.run_messages)
+        messagesImage = ctk.CTkImage(light_image=Image.open("Image_app/Messages.png"), size=(150, 150))
+        button_messagesImage = ctk.CTkButton(self.content_frame_accueil, image=messagesImage, text="", fg_color= "transparent", command=lambda: self.launch_app("messages"))
         button_messagesImage.grid(row=3, column=2, padx=100, pady=0, sticky="e")
 
-        wikiImage = ctk.CTkImage(light_image=Image.open("Image/Wiki.png"), size=(150, 150))
-        button_wikiImage = ctk.CTkButton(self.content_frame_accueil, image=wikiImage, text="", fg_color= "transparent", command=self.run_wiki)
+        wikiImage = ctk.CTkImage(light_image=Image.open("Image_app/Wiki.png"), size=(150, 150))
+        button_wikiImage = ctk.CTkButton(self.content_frame_accueil, image=wikiImage, text="", fg_color= "transparent", command=lambda: self.launch_app("wiki"))
         button_wikiImage.grid(row=4, column=0, padx=100, pady=0, sticky="w")
 
-        calculatriceImage = ctk.CTkImage(light_image=Image.open("Image/Calculatrice.png"), size=(150, 150))
-        button_calculatriceImage = ctk.CTkButton(self.content_frame_accueil, image=calculatriceImage, text="", fg_color= "transparent", command=self.run_calculatrice)
+        calculatriceImage = ctk.CTkImage(light_image=Image.open("Image_app/Calculatrice.png"), size=(150, 150))
+        button_calculatriceImage = ctk.CTkButton(self.content_frame_accueil, image=calculatriceImage, text="", fg_color= "transparent", command=lambda: self.launch_app("calculatrice"))
         button_calculatriceImage.grid(row=4, column=1, padx=100, pady=10, sticky="nsew")
 
         # FRAME PARAMETRE
@@ -126,54 +121,53 @@ class App(ctk.CTk):
 
     # --- Fonctions de navigation (Simulation) ---
     def show_home(self):
+        if hasattr(self, 'current_app_frame'):
+            self.current_app_frame.destroy() 
+        
+            del self.current_app_frame 
+
         self.content_frame_settings.grid_forget()
         self.content_frame_help.grid_forget()
+
         self.content_frame_accueil.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
-        
 
     def show_settings(self):
+        
+        if hasattr(self, 'current_app_frame'):
+            self.current_app_frame.destroy()
+            del self.current_app_frame
+
         self.content_frame_accueil.grid_forget()
         self.content_frame_help.grid_forget()
         self.content_frame_settings.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
 
-
     def show_help(self):
+        
+        if hasattr(self, 'current_app_frame'):
+            self.current_app_frame.destroy()
+            del self.current_app_frame
+
         self.content_frame_accueil.grid_forget()
         self.content_frame_settings.grid_forget()
         self.content_frame_help.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
 
-    def run_snake(self):
-        pass
+    def launch_app(self, app_name):
 
-    def run_morpion(self):
-        pass
+        self.content_frame_accueil.grid_forget()
+        
+        if hasattr(self, 'current_app_frame'):
+            self.current_app_frame.destroy()
+        
+        self.current_app_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.current_app_frame.grid(row=0, column=1, sticky="nsew", padx=30, pady=30)
+        
+        if app_name == "snake":
+            snake(self.current_app_frame)
+        
 
-    def run_messages(self):
-        pass
-
-    def run_chrono(self):
-        pass
-
-    def run_notes(self):
-        pass
-
-    def run_contacts(self):
-        pass
-
-    def run_wiki(self):
-        pass
-
-    def run_calculatrice(self):
-        pass
-
-def run_play_navigator():
-    page = "accueil"
-    match page:
-        case 
-
-run_play_navigator()
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
 
