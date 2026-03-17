@@ -15,9 +15,14 @@ icon = PhotoImage(file="IconBitMap_ESEOFOX.png")
 fenetre.iconphoto(True,icon)
 fenetre.attributes("-alpha",1)
 
+global ws
+global hs
 ws = fenetre.winfo_screenwidth()
 hs = fenetre.winfo_screenheight()
-fenetre.geometry(f"{ws}x{hs}-0+0")
+fenetre.geometry(f"{ws}x{hs}")
+fenetre.minsize(int(ws/2),int(hs/2))
+fenetre.maxsize(ws,hs)
+
 
 set_appearance_mode("light")
 set_default_color_theme("blue")
@@ -41,6 +46,7 @@ frameMenuPrincipal.grid(row=1,column=0,sticky=N)
 frameMenuPrincipal.grid_propagate(False)
 
 
+
 # ------------------ Frame Principal
 
 
@@ -62,6 +68,15 @@ def recherche(texte) :
         for item in listeElement :
             listRecherche.insert("END",item.capitalize())
                 
+
+fenetre._set_scaling(1,1)
+
+def ch_taille(ws,hs) :
+    if fenetre.winfo_height != ws :
+        ws = fenetre.winfo_height()
+        hs = fenetre.winfo_width()
+        print(ws,":",hs)
+        boutton_frame.configure(height=45)
                 
         
 # ------------------------ Fonction
@@ -70,9 +85,6 @@ def recherche(texte) :
 
 # Widgets --------------------------------
 
-    """
-    Widget Frame Barre Supérieur
-    """
 frameBarreRecherche = CTkFrame(frameBarreSuperieur,width=500,height=45)
 imageLogo = CTkImage(Image.open("IconBitMap_ESEOFOX.png"),size=(70,70))
 imageLoupe = CTkImage(Image.open("icone-loupe-gris.png"),size=(30,30))
@@ -128,6 +140,7 @@ L=[button_chronoImage,button_contactsImage,button_messagesImage,button_morpionIm
 
 barreRecherche.bind("<KeyRelease>",lambda event: recherche(barreRecherche.get()))
 
+fenetre.bind("<Configure>",lambda event : ch_taille(ws,hs))
 
 # --------------------- Méthode de widget
 
@@ -148,7 +161,7 @@ frameBarreRecherche.configure(fg_color="gray21")
 imageLogo.configure()
 imageLoupe.configure()
 image_label.configure()
-boutton_frame.configure()
+boutton_frame.configure(height=100)
 barreRecherche.configure(font=CTkFont(size=12),corner_radius=5,fg_color="gray21",text_color="white")
 listRecherche.configure(fg_color="gray21",corner_radius=0,bg_color="transparent",border_width=2)
 imageBarre_lavel.configure(fg_color="transparent")
@@ -166,7 +179,6 @@ frameMenuApplications.configure(fg_color="gray21")
 label_App.configure(text_color="white",font=CTkFont("Arial",size=20))
 
 frameScrollApp.configure(fg_color="grey21",corner_radius=0)
-
 
 # --------------------------------  Style
 
