@@ -112,3 +112,4 @@ def snake():
 
     fenetre.mainloop()
 
+snake()
