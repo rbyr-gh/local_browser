@@ -48,27 +48,27 @@ def chronometre():
     debut = 0
 
     def update():
-        global en_cours, temps
+        nonlocal en_cours, temps
         if en_cours:
             t = (time.time() - debut) + temps
             label_chrono.configure(text=f"{t:.3f} s")
             fenetre.after(10, update)
 
     def start():
-        global en_cours, debut
+        nonlocal en_cours, debut
         if not en_cours:
             debut = time.time()
             en_cours = True
             update()
 
     def stop():
-        global en_cours, temps
+        nonlocal en_cours, temps
         if en_cours:
             temps += time.time() - debut
         en_cours = False
 
     def reset():
-        global temps, debut, en_cours
+        nonlocal temps, debut, en_cours
         en_cours = False
         temps_ecoule = 0
         debut = 0
@@ -100,21 +100,21 @@ def chronometre():
     debut_jeu = 0
 
     def update_jeu():
-        global en_cours_jeu, temps_jeu
+        nonlocal en_cours_jeu, temps_jeu
         if en_cours_jeu:
             t = (time.time() - debut_jeu) + temps_jeu
             label_jeu.configure(text=f"{t:.3f} s")
             fenetre.after(10, update_jeu)
 
     def start_jeu():
-        global en_cours_jeu, debut_jeu
+        nonlocal en_cours_jeu, debut_jeu
         if not en_cours_jeu:
             debut_jeu = time.time()
             en_cours_jeu = True
             update_jeu()
 
     def stop_jeu():
-        global en_cours_jeu, temps_jeu
+        nonlocal en_cours_jeu, temps_jeu
         if en_cours_jeu:
             temps_jeu += time.time() - debut_jeu
         en_cours_jeu = False
@@ -125,7 +125,7 @@ def chronometre():
         label_jeu.configure(text=f"Votre score est de {score: .2f}/10")
 
     def reset_jeu():
-        global temps_jeu, debut_jeu, en_cours_jeu
+        nonlocal temps_jeu, debut_jeu, en_cours_jeu
         en_cours_jeu = False
         temps_ecoule = 0
         debut_jeu = 0
@@ -150,3 +150,4 @@ def chronometre():
 
     fenetre.mainloop()
         
+chronometre()
