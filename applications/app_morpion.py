@@ -2,6 +2,19 @@ import customtkinter as ctk
 from tkinter import Canvas, Toplevel
 import random
 
+black = "gray90"
+white = "gray15"
+
+couleur_Fond2 = ("grey95","grey23")
+couleur_Fond = (black,"grey15")
+couleur_Widget = ("grey74","grey43")
+couleur_Bouton1 = (black,"grey3")
+couleur_Bouton2 = ("DarkOrange1","DarkOrange3")
+couleur_Surbrillance =("grey74","grey43")
+couleur_Bord = (white,black)
+couleur_Texte1 = (white,black)
+couleur_Texte2 = ("grey26","grey80")
+
 
 class frame_Morpion(ctk.CTkFrame):
     def __init__(self, parent):
@@ -19,13 +32,13 @@ class frame_Morpion(ctk.CTkFrame):
         self.joueur2.pack(pady=5)
 
         # 🔹 Canvas (reste Tkinter, normal)
-        self.cnv = Canvas(self, width=600, height=600, bg="white")
+        self.cnv = Canvas(self, width=1200, height=600, bg="aquamarine3")
         self.cnv.pack(pady=10)
 
         self.dessiner_grille()
 
         # 🔹 Bouton CTk
-        self.btn_rejouer = ctk.CTkButton(self, text="Rejouer", command=self.vider)
+        self.btn_rejouer = ctk.CTkButton(self, text="Rejouer", command=self.vider,fg_color=couleur_Fond,text_color="aquamarine3",hover_color=couleur_Surbrillance)
         self.btn_rejouer.pack(pady=10)
 
         self.cnv.bind("<Button-1>", self.clic)
@@ -35,11 +48,10 @@ class frame_Morpion(ctk.CTkFrame):
     # =============================
     def dessiner_grille(self):
         self.cnv.delete("all")
-        self.cnv.create_rectangle(75,75,525,525,outline="black")
-        self.cnv.create_line(225,75,225,525)
-        self.cnv.create_line(375,75,375,525)
-        self.cnv.create_line(75,225,525,225)
-        self.cnv.create_line(75,375,525,375)
+        self.cnv.create_line(525,75,525,525,fill="aquamarine4",width=10)
+        self.cnv.create_line(675,75,675,525,fill="aquamarine4",width=10)
+        self.cnv.create_line(375,225,825,225,fill="aquamarine4",width=10)
+        self.cnv.create_line(375,375,825,375,fill="aquamarine4",width=10)
 
     # =============================
     # 🔹 Reset
@@ -104,15 +116,15 @@ class frame_Morpion(ctk.CTkFrame):
     # =============================
     def dessiner_o(self,i,j):
         coords = self.get_coords(i,j)
-        self.cnv.create_oval(*coords, outline="blue", width=3)
+        self.cnv.create_oval(*coords, outline="grey30", width=8)
 
     def dessiner_x(self,i,j):
         x1,y1,x2,y2 = self.get_coords(i,j)
-        self.cnv.create_line(x1,y1,x2,y2, fill="red", width=3)
-        self.cnv.create_line(x2,y1,x1,y2, fill="red", width=3)
+        self.cnv.create_line(x1,y1,x2,y2, fill="grey90", width=8)
+        self.cnv.create_line(x2,y1,x1,y2, fill="grey90", width=8)
 
     def get_coords(self,i,j):
-        base_x = 75 + j*150
+        base_x = 375 + j*150
         base_y = 75 + i*150
         return (base_x+15, base_y+15, base_x+135, base_y+135)
 
@@ -126,7 +138,7 @@ class frame_Morpion(ctk.CTkFrame):
         x,y = event.x, event.y
 
         i = (y-75)//150
-        j = (x-75)//150
+        j = (x-375)//150
 
         if 0 <= i < 3 and 0 <= j < 3:
             if self.tab1[i][j] == 0:
