@@ -92,7 +92,7 @@ def switch_theme():
         
 def red_fen(event) :
     if lBox_Recherche.winfo_ismapped() :
-        lBox_Recherche.place(x=fenetre.winfo_width()/2-270,y=60)
+        lBox_Recherche.place(x=fenetre.winfo_width()/2-240,y=60)
         
 def creer_compte() :
     label_Error.configure(text="")
@@ -165,7 +165,7 @@ frame_Connexion = CTkFrame(fenetre)
 
 frame_Connexion.grid(row=0,column=0,sticky="nsew")
 
-frame_Connexion.grid_columnconfigure(0,weight=1)
+frame_Connexion.grid_columnconfigure(0,weight=2)
 frame_Connexion.grid_columnconfigure(1,weight=1)
 
 frame_Connexion.grid_rowconfigure(0,weight=1)
@@ -257,7 +257,7 @@ frame_CreationCompte = CTkFrame(fenetre)
 
 frame_CreationCompte.grid(row=0,column=0,sticky="nsew")
 
-frame_CreationCompte.grid_columnconfigure(0,weight=1)
+frame_CreationCompte.grid_columnconfigure(0,weight=2)
 frame_CreationCompte.grid_columnconfigure(1,weight=1)
 
 frame_CreationCompte.grid_rowconfigure(0,weight=1)
@@ -388,11 +388,11 @@ entry_barreRecherche.configure(font=CTkFont(size=12),corner_radius=25,fg_color=c
 label_Loupe.configure(fg_color=couleur_Fond2)
 
 frame_BarreRecherche.grid(row=0,column=1,sticky="ew")
-label_Accueil.grid(row=0,column=2,padx=50,pady=10,sticky="e")
+label_Accueil.grid(row=0,column=2,padx=20,pady=5,sticky="e")
 btn_Frame.grid(row=0,column=0,padx=20,pady=10,sticky="w")
 entry_barreRecherche.grid(row=0,column=0,pady=5,padx=(60,0),sticky="nsew")
 label_Loupe.grid(row=0,column=0,padx=20,pady=10,sticky="e")
-optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=115)
+optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 
 ## RESULTAT RECHERCHE
 def recherche(texte) :
@@ -401,7 +401,7 @@ def recherche(texte) :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
     else :
-        lBox_Recherche.place(x=fenetre.winfo_width()/2-270,y=60)
+        lBox_Recherche.place(x=fenetre.winfo_width()/2-240,y=60)
         lBox_Recherche.lift()
         lBox_Recherche.delete(0, "END")
         listeElement = [item for item in L_application if texte.lower() in item]
@@ -590,6 +590,8 @@ label_1.grid(row=0,column=0,sticky="w")
 # FRAME APP 1
 
 frame_Morpion = frame_Morpion(framePrincipal)
+
+frame_Morpion.configure(fg_color=couleur_Fond)
 
 frame_Morpion.grid(row=1,column=0,sticky="nsew")
 frame_Morpion.grid_columnconfigure(0,weight=1)
