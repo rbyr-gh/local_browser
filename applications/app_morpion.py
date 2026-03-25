@@ -20,26 +20,49 @@ class frame_Morpion(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
+
         # 🔹 Variables (IMPORTANT : plus de global)
         self.tab1 = [[0,0,0],[0,0,0],[0,0,0]]
         self.tour = 1
+        self.c_score1 = 0
+        self.c_score2 = 0
 
         # 🔹 Labels CTk
-        self.joueur1 = ctk.CTkLabel(self, text="Joueur 1 : O")
-        self.joueur1.pack(pady=5)
+        self.joueur1 = ctk.CTkFrame(self,border_width=2,corner_radius=10,border_color=couleur_Bord,fg_color=couleur_Fond)
+        self.joueur1.grid(row=0,column=0,sticky="ns",padx=(250,0),ipadx=50,ipady=5,pady=(20,0))
+        
+        self.joueur1.grid_rowconfigure(0,weight=1)
+        self.joueur1.grid_columnconfigure(0,weight=1)
+        self.joueur1.grid_columnconfigure(1,weight=1)
+        
+        self.texte1 = ctk.CTkLabel(self.joueur1,text="X",font=("Arial",24,"bold"))
+        self.texte1.grid(row=0,column=0,sticky="w",ipadx=10,ipady=10,padx=10)
+        
+        self.score1 = ctk.CTkLabel(self.joueur1,text=f"{self.c_score2}",font=("Arial",24),text_color=couleur_Texte2)
+        self.score1.grid(row=0,column=1,sticky="e",ipadx=10,ipady=10,padx=(0,10))
 
-        self.joueur2 = ctk.CTkLabel(self, text="Ordinateur : X")
-        self.joueur2.pack(pady=5)
+        self.joueur2 = ctk.CTkFrame(self,border_width=2,corner_radius=10,border_color="aquamarine4",fg_color=couleur_Fond)
+        self.joueur2.grid(row=0,column=0,sticky="ns",padx=(0,250),ipadx=50,ipady=5,pady=(20,0))
+        
+        self.joueur2.grid_rowconfigure(0,weight=1)
+        self.joueur2.grid_columnconfigure(0,weight=1)
+        self.joueur2.grid_columnconfigure(1,weight=1)
+        
+        self.texte2 = ctk.CTkLabel(self.joueur2,text=f"O",font=("Arial",24,"bold"))
+        self.texte2.grid(row=0,column=0,sticky="w",ipadx=10,ipady=10,padx=10)
+        
+        self.score2 = ctk.CTkLabel(self.joueur2,text=f"{self.c_score1}",font=("Arial",24),text_color=couleur_Texte2)
+        self.score2.grid(row=0,column=1,sticky="e",ipadx=10,ipady=10,padx=(0,10))
 
         # 🔹 Canvas (reste Tkinter, normal)
         self.cnv = Canvas(self, width=1200, height=600, bg="aquamarine3")
-        self.cnv.pack(pady=10)
+        self.cnv.grid(row=1,column=0)
 
         self.dessiner_grille()
 
         # 🔹 Bouton CTk
         self.btn_rejouer = ctk.CTkButton(self, text="Rejouer", command=self.vider,fg_color=couleur_Fond,text_color="aquamarine3",hover_color=couleur_Surbrillance)
-        self.btn_rejouer.pack(pady=10)
+        self.btn_rejouer.grid(row=2,column=0,sticky="n")
 
         self.cnv.bind("<Button-1>", self.clic)
 
@@ -78,22 +101,43 @@ class frame_Morpion(ctk.CTkFrame):
             return True
         return False
 
+    def egalite_test(self):
+        for ligne in self.tab1:
+            if 0 in ligne:
+                return False
+        return True   
+
     def fenetreVictoire(self, joueur):
-        win = ctk.CTkToplevel(self)
-        win.geometry("300x200")
-        win.attributes("-topmost", True)
-
-        label = ctk.CTkLabel(win, text=f"Victoire de {joueur}")
-        label.pack(pady=20)
-
-        btn = ctk.CTkButton(win, text="OK", command=win.destroy)
-        btn.pack()
-
-        self.vider()
+        self.cnv.delete("all")
+        
+        if joueur == 1 :
+            self.c_score2 += 1
+            self.score2.configure(text=f'{self.c_score2}')
+            self.cnv.create_text(600,450,text="GAGNÉ !",fill="grey30",font=("Arial",50,"bold"))
+            self.cnv.create_oval(475,125,725,375, outline="grey30", width=20) # 300,200
+        elif joueur == 2 :
+            self.c_score1 += 1
+            self.score1.configure(text=f"{self.c_score1}")
+            self.cnv.create_text(600,450,text="GAGNÉ !",fill="grey30",font=("Arial",50,"bold"))
+            self.cnv.create_line(475,125,725,375, fill="grey90", width=20)
+            self.cnv.create_line(725,125,475,375, fill="grey90", width=20)
+        elif joueur == 3:
+            self.cnv.create_text(600,450,text="MATCH NUL",fill="grey30",font=("Arial",50,"bold")) #600
+            self.cnv.create_oval(380,175,580,375, outline="grey30", width=20) # 300,200
+            self.cnv.create_line(620,175,820,375, fill="grey90", width=20)
+            self.cnv.create_line(820,175,620,375, fill="grey90", width=20)
 
     def verifVictoire(self, joueur):
         if self.victoire_test(joueur):
             self.fenetreVictoire(joueur)
+            return True
+        
+        elif self.egalite_test():
+            self.fenetreVictoire(3)
+            return True
+        
+        else :
+            return False
 
     # =============================
     # 🔹 IA
@@ -105,11 +149,14 @@ class frame_Morpion(ctk.CTkFrame):
     def ordinateur(self):
         coup = self.coup_aleatoire()
         if coup:
+            self.joueur2.configure(border_color="aquamarine4")
+            self.joueur1.configure(border_color=couleur_Texte1)
             i,j = coup
             self.tab1[i][j] = 2
             self.dessiner_x(i,j)
             self.tour = 1
             self.verifVictoire(2)
+            
 
     # =============================
     # 🔹 Dessins
@@ -133,7 +180,7 @@ class frame_Morpion(ctk.CTkFrame):
     # =============================
     def clic(self, event):
         if self.tour != 1:
-            return
+            return False
 
         x,y = event.x, event.y
 
@@ -145,7 +192,8 @@ class frame_Morpion(ctk.CTkFrame):
                 self.tab1[i][j] = 1
                 self.dessiner_o(i,j)
 
-                self.verifVictoire(1)
-
-                self.tour = 2
-                self.after(300, self.ordinateur)
+                if not self.verifVictoire(1) :
+                    self.joueur1.configure(border_color="aquamarine4")
+                    self.joueur2.configure(border_color=couleur_Texte1)
+                    self.after(300, self.ordinateur)
+                    self.tour = 2

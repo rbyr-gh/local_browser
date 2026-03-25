@@ -595,8 +595,9 @@ frame_Morpion.configure(fg_color=couleur_Fond)
 
 frame_Morpion.grid(row=1,column=0,sticky="nsew")
 frame_Morpion.grid_columnconfigure(0,weight=1)
-frame_Morpion.grid_rowconfigure(0,weight=1)
-
+frame_Morpion.grid_rowconfigure(0,weight=0)
+frame_Morpion.grid_rowconfigure(1,weight=3)
+frame_Morpion.grid_rowconfigure(2,weight=9)
 
 
 show_frame(frame_Connexion)
