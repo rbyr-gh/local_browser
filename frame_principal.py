@@ -604,3 +604,4 @@ show_frame(frame_Connexion)
 update_grid()
 fenetre.bind("<Configure>",red_fen)
 fenetre.mainloop()
+ 
