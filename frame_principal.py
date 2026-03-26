@@ -10,6 +10,7 @@ import re
 
 
 from applications.app_morpion import frame_Morpion
+from applications.app_calculatrice import frame_Calculatrice
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -35,6 +36,7 @@ couleur_Texte1 = (white,black)
 couleur_Texte2 = ("grey26","grey80")
 
 set_appearance_mode("dark")
+
 theme = "dark"
 
 fenetre = CTk()
@@ -510,7 +512,10 @@ btn_messagesImage = CTkButton(frame_ScrollApp, image=messagesImage, text="Messag
 wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
 btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
-L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage]
+calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
+btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Calculatrice))
+
+L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_calculatriceImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -532,6 +537,9 @@ btn_messagesImage.configure(height=100,width=100,compound="top",anchor="s",text_
 
 wikiImage.configure(size=(90, 90))
 btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+calculatriceImage.configure(size=(90, 90))
+btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
 
@@ -655,7 +663,7 @@ frame_Aide.grid_rowconfigure(1,weight=1)
 label_1 = CTkLabel(frame_Aide,text="Aide")
 label_1.grid(row=0,column=0,sticky="w")
 
-# FRAME APP 1
+# FRAME APP MORPION
 
 frame_Morpion = frame_Morpion(framePrincipal)
 
@@ -666,6 +674,12 @@ frame_Morpion.grid_columnconfigure(0,weight=1)
 frame_Morpion.grid_rowconfigure(0,weight=0)
 frame_Morpion.grid_rowconfigure(1,weight=3)
 frame_Morpion.grid_rowconfigure(2,weight=9)
+
+# FRAME APP CALCULATRICE 
+
+frame_Calculatrice = frame_Calculatrice(framePrincipal)
+frame_Calculatrice.grid(row=1,column=0,sticky="nsew")
+
 
 
 show_frame(frame_Connexion)

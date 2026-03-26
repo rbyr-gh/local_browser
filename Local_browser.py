@@ -5,8 +5,8 @@ from os import *
 from PIL import Image
 import time
 from math import ceil
-from App_features.snake import snake
-from App_features.calculatrice import calculatrice
+from applications.app_snake import snake
+from applications.app_calculatrice import calculatrice
 
 
 
