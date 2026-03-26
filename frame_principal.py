@@ -10,6 +10,9 @@ import re
 
 
 from applications.app_morpion import frame_Morpion
+from applications.app_chrono import frame_Chrono
+from applications.app_snake import frame_Snake
+from applications.app_mastermind import frame_Mastermind
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -480,7 +483,7 @@ frame_MenuApplications.grid(row=0,column=1,sticky="nsew")
 frame_MenuApplications.grid_columnconfigure(0,weight=1)
 frame_MenuApplications.grid_rowconfigure(1,weight=1)
 
-label_App = CTkLabel(frame_MenuApplications,text="Bibliothéque d'applications")
+label_App = CTkLabel(frame_MenuApplications,text="Bibliothèque d'applications")
 
 frame_ScrollApp = CTkScrollableFrame(frame_MenuApplications)
 frame_ScrollApp.grid(row=1,column=0,padx=5,pady=5,sticky="nsew")
@@ -488,10 +491,10 @@ frame_ScrollApp.grid(row=1,column=0,padx=5,pady=5,sticky="nsew")
 label_App.grid(row=0,column=0,padx=10,pady=5)
 
 chronoImage = CTkImage(Image.open("image/Chrono.png"))
-btn_chronoImage = CTkButton(frame_ScrollApp, image=chronoImage, text="Chrono", fg_color= "transparent",hover_color=couleur_Surbrillance)
+btn_chronoImage = CTkButton(frame_ScrollApp, image=chronoImage, text="Chrono", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Chrono))
 
 snakeImage = CTkImage(light_image=Image.open("image/Snake.png"))
-btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance)
+btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Snake))
 
 notesImage = CTkImage(light_image=Image.open("image/Notes.png"))
 btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance)
@@ -508,7 +511,10 @@ btn_messagesImage = CTkButton(frame_ScrollApp, image=messagesImage, text="Messag
 wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
 btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
-L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage]
+mastermindImage = CTkImage(light_image=Image.open("image/Mastermind.png"))
+btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Mastermind", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Mastermind))
+
+L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_mastermindImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -530,6 +536,12 @@ btn_messagesImage.configure(height=100,width=100,compound="top",anchor="s",text_
 
 wikiImage.configure(size=(90, 90))
 btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+wikiImage.configure(size=(90, 90))
+btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+mastermindImage.configure(size=(90, 90))
+btn_mastermindImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
 
@@ -599,8 +611,31 @@ frame_Morpion.grid_rowconfigure(0,weight=0)
 frame_Morpion.grid_rowconfigure(1,weight=3)
 frame_Morpion.grid_rowconfigure(2,weight=9)
 
+# FRAME APP 2
+
+frame_Chrono = frame_Chrono(framePrincipal)
+frame_Chrono.grid(row=1,column=0,sticky="nsew")
+
+
+# FRAME APP 3
+
+frame_Snake = frame_Snake(framePrincipal)
+frame_Snake.grid(row=1,column=0,sticky="nsew")
+
+# FRAME APP 4
+
+frame_Mastermind = frame_Mastermind(framePrincipal)
+frame_Mastermind.grid(row=1,column=0,sticky="nsew")
+
+
+
+
+
 
 show_frame(frame_Connexion)
 update_grid()
 fenetre.bind("<Configure>",red_fen)
 fenetre.mainloop()
+
+ 
+

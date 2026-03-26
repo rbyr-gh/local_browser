@@ -193,6 +193,6 @@ cnv.bind("<Button-1>",clic)
 btn_quitter = Button(fenetre,text="Quitter",command=fenetre.destroy)
 btn_quitter.pack(side=RIGHT)
 btn_rejouer = Button(fenetre,text="Rejouer", command=vider)
-btn_rejouer.pack(side=LEFT)
+btn_rejouer.pack()
 
 fenetre.mainloop()
