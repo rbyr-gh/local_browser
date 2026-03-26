@@ -92,7 +92,7 @@ def switch_theme():
         
 def red_fen(event) :
     if lBox_Recherche.winfo_ismapped() :
-        lBox_Recherche.place(x=fenetre.winfo_width()/2-240,y=60)
+        lBox_Recherche.place(x=fenetre.winfo_width()/2-300,y=60)
     if frame_chtPrenom.winfo_ismapped() :
         frame_chtPrenom.place(x=fenetre.winfo_width()/4,y=fenetre.winfo_height()/5)
         
@@ -132,10 +132,12 @@ def creer_compte() :
                     
 def connexion() :
     global profil
+    global utilisateur
     label_ErrorC.configure(text="")
     
     mdp = entry_MdP.get()
     mail = entry_Mail.get()
+    
     
     L = []
     with open('local/identifiant.csv',newline='') as csvfile :
@@ -149,6 +151,9 @@ def connexion() :
         if mail in idd and mdp in idd :
             check = True
             prenom = idd[0]  
+            
+            utilisateur = [prenom,mail,mdp]
+            
     
     if check == False :
         label_ErrorC.configure(text="Ce compte n'existe pas")
@@ -157,6 +162,7 @@ def connexion() :
         show_frame(framePrincipal)
         entry_MdP.delete(0,"end")
         entry_Mail.delete(0,"end")
+        
         
  
 
@@ -374,9 +380,9 @@ btn_Frame = CTkButton(frameBarreSuperieur,text="",image=img_Accueil,command = la
 entry_barreRecherche = CTkEntry(frame_BarreRecherche,placeholder_text="Rechercher une application")
 label_Loupe = CTkLabel(frame_BarreRecherche,image=img_Loupe,text="")
 
-optionMenu_Profil = CTkLabel(frameBarreSuperieur,text=profil)
+optionMenu_Profil = CTkLabel(frameBarreSuperieur,text=profil,width=200)
 
-optionMenu_Profil.configure(fg_color=couleur_Fond2)
+optionMenu_Profil.configure(fg_color=couleur_Fond2,anchor="e")
 
 btn_Frame.configure(width=45,height=45,fg_color=couleur_Fond2,border_width=0,border_color=couleur_Bord,hover_color=couleur_Surbrillance)
 img_Profil.configure(size=(45,45))
@@ -392,7 +398,7 @@ label_Loupe.configure(fg_color=couleur_Fond2)
 frame_BarreRecherche.grid(row=0,column=1,sticky="ew")
 label_Accueil.grid(row=0,column=2,padx=20,pady=5,sticky="e")
 btn_Frame.grid(row=0,column=0,padx=20,pady=10,sticky="w")
-entry_barreRecherche.grid(row=0,column=0,pady=5,padx=(60,0),sticky="nsew")
+entry_barreRecherche.grid(row=0,column=0,pady=5,padx=(100,0),sticky="nsew")
 label_Loupe.grid(row=0,column=0,padx=20,pady=10,sticky="e")
 optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 
@@ -403,7 +409,7 @@ def recherche(texte) :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
     else :
-        lBox_Recherche.place(x=fenetre.winfo_width()/2-240,y=60)
+        lBox_Recherche.place(x=fenetre.winfo_width()/2-300,y=60)
         lBox_Recherche.lift()
         lBox_Recherche.delete(0, "END")
         listeElement = [item for item in L_application if texte.lower() in item]
@@ -593,41 +599,130 @@ frame_profil.grid_rowconfigure(4,weight=1)
 frame_profil.grid_columnconfigure(0,weight=1)
 
 label_infoProfil = CTkLabel(frame_profil,text="Informations Personnelles")
-label_infoProfil.grid(row=0,column=0,sticky="nw",padx=6,pady=3)
+label_infoProfil.grid(row=0,column=0,sticky="nw",padx=20,pady=3)
 
-def afficher_chtProfil() :
-    frame_chtPrenom.place(x=fenetre.winfo_screenwidth()/4,y=fenetre.winfo_screenheight()/5,relwidth=0.4,relheight=0.4)
+def modification_profil(modif_entree) :
+    nouvel_utilisateur = []
+    global utilisateur
+    if modif_entree == 1 :
+        nouvel_utilisateur = [entry_chtPrenom.get(),utilisateur[1],utilisateur[2]]
+        optionMenu_Profil.configure(text=entry_chtPrenom.get())
+        masquer_frameCht(frame_chtPrenom)
+        pass
     
-def masquer_chtProfil() :
-    frame_chtPrenom.place_forget() 
+    elif modif_entree == 2 :
+        nouvel_utilisateur = [utilisateur[0],entry_chtMail.get(),utilisateur[2]]
+        masquer_frameCht(frame_chtMail)
+        pass
+    
+    else :
+        pass
+    
+    lignes = []
+    with open('local/identifiant.csv',mode='r',newline='') as csvfile :
+        spamreader = reader(csvfile, delimiter=",")
+        for row in spamreader :
+            if row == utilisateur :
+                row = nouvel_utilisateur
+                utilisateur = [nouvel_utilisateur[0],nouvel_utilisateur[1],nouvel_utilisateur[2]]
+            lignes.append(row)
+    csvfile.close()
+    
+    with open('local/identifiant.csv',mode='w',newline='') as csvfile :
+        ecriture = writer(csvfile)
+        for i in lignes :
+            ecriture.writerow(i)
+    csvfile.close()
 
-btn_Prenom = CTkButton(frame_profil,text=f"Prénom",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,command=afficher_chtProfil)
+def afficher_frameCht(frame) :
+    frame.place(x=fenetre.winfo_screenwidth()/4,y=fenetre.winfo_screenheight()/5,relwidth=0.4,relheight=0.4)
+    if frame == frame_chtPrenom :
+        entry_chtPrenom.insert(0,f"{utilisateur[0]}")
+    if frame == frame_chtMail :
+        entry_chtMail.insert(0,f"{utilisateur[1]}")
+    
+def masquer_frameCht(frame) :
+    frame.place_forget() 
+    if frame == frame_chtPrenom :
+        entry_chtPrenom.delete(0,"end")
+    if frame == frame_chtMail :
+        entry_chtMail.delete(0,"end")
+    
+## PRENOM    
+
+btn_Prenom = CTkButton(frame_profil,text="Prénom",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,command= lambda: afficher_frameCht(frame_chtPrenom),text_color=couleur_Texte1)
 btn_Prenom.grid(row=1,column=0,padx=20,pady=5,sticky="nw",ipadx=200)  
 
-frame_chtPrenom = CTkFrame(frame_Parametres,fg_color=couleur_Fond,border_width=3,border_color=couleur_Surbrillance)
-frame_chtPrenom.grid_rowconfigure(0,weight=1)
+frame_chtPrenom = CTkFrame(frame_Parametres,fg_color=couleur_Fond,border_width=1,border_color=couleur_Bord,corner_radius=0)
+frame_chtPrenom.grid_rowconfigure(0,weight=0)
+frame_chtPrenom.grid_rowconfigure(1,weight=1)
+frame_chtPrenom.grid_rowconfigure(2,weight=1)
 frame_chtPrenom.grid_columnconfigure(0,weight=1)
 
-btn_Annuler = CTkButton(frame_chtPrenom,text="Annuler",command=masquer_chtProfil)
-btn_Annuler.grid(row=0,column=0,sticky="es",padx=(0,10),pady=(0,10))
+btn_Valider = CTkButton(frame_chtPrenom,text="Valider",command= lambda: modification_profil(1))
+btn_Valider.grid(row=2,column=0,sticky='es',padx=(0,10),pady=(0,10))
+btn_Valider.configure(fg_color=couleur_Bouton2,border_color=couleur_Bord,text_color=couleur_Texte1,hover_color=couleur_Surbrillance,border_width=0)
 
-label_ImgCht = CTkLabel(frame_chtPrenom,image=img_Profil)
-label_ImgCht.grid(row=0,column=0)
+btn_Annuler = CTkButton(frame_chtPrenom,text="Annuler",command= lambda : masquer_frameCht(frame_chtPrenom))
+btn_Annuler.grid(row=2,column=0,sticky="es",padx=(0,160),pady=(0,10))
+btn_Annuler.configure(fg_color=couleur_Fond,border_color=couleur_Bord,text_color=couleur_Texte1,hover_color=couleur_Surbrillance,border_width=1)
+
+label_Prenom = CTkLabel(frame_chtPrenom,text="Prénom",font=("Arial",24,"bold"))
+label_Prenom.grid(row=1,column=0,sticky='nw',padx=(60,0),pady=(20,0))
+
+entry_chtPrenom = CTkEntry(frame_chtPrenom,placeholder_text="Prénom")
+entry_chtPrenom.grid(row=1,column=0,sticky="nw",padx=(50,0),pady=(70,0),ipadx=100)
+entry_chtPrenom.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Bord,text_color=couleur_Texte1,corner_radius=0)
 
 
-label_PrenomFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond)
+img_Profil3 = CTkImage(dark_image=Image.open("image/dark/Profil2Dark.png"),light_image=Image.open("image/light/Profil2Light.png"))
+img_Profil3.configure(size=(90,90))
+
+label_ImgCht = CTkLabel(frame_chtPrenom,text="",image=img_Profil3)
+label_ImgCht.grid(row=0,column=0,sticky="n",pady=(30,0))
+
+label_PrenomFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_PrenomFleche.grid(row=1,column=0,pady=5,padx=(540,0),sticky='nw')
 
-btn_Mail = CTkButton(frame_profil,text=f"Mail",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0)
+
+btn_Mail = CTkButton(frame_profil,text=f"Mail",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1,command= lambda:afficher_frameCht(frame_chtMail))
 btn_Mail.grid(row=2,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
 
-label_MailFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond)
+frame_chtMail = CTkFrame(frame_Parametres,fg_color=couleur_Fond,border_width=1,border_color=couleur_Bord,corner_radius=0)
+frame_chtMail.grid_rowconfigure(0,weight=0)
+frame_chtMail.grid_rowconfigure(1,weight=1)
+frame_chtMail.grid_rowconfigure(2,weight=1)
+frame_chtMail.grid_columnconfigure(0,weight=1)
+
+btn_Valider2 = CTkButton(frame_chtMail,text="Valider",command= lambda: modification_profil(2))
+btn_Valider2.grid(row=2,column=0,sticky='es',padx=(0,10),pady=(0,10))
+btn_Valider2.configure(fg_color=couleur_Bouton2,border_color=couleur_Bord,text_color=couleur_Texte1,hover_color=couleur_Surbrillance,border_width=0)
+
+btn_Annuler2 = CTkButton(frame_chtMail,text="Annuler",command= lambda : masquer_frameCht(frame_chtMail))
+btn_Annuler2.grid(row=2,column=0,sticky="es",padx=(0,160),pady=(0,10))
+btn_Annuler2.configure(fg_color=couleur_Fond,border_color=couleur_Bord,text_color=couleur_Texte1,hover_color=couleur_Surbrillance,border_width=1)
+
+label_Mail = CTkLabel(frame_chtMail,text="Mail",font=("Arial",24,"bold"))
+label_Mail.grid(row=1,column=0,sticky='nw',padx=(60,0),pady=(20,0))
+
+entry_chtMail = CTkEntry(frame_chtMail,placeholder_text="Mail")
+entry_chtMail.grid(row=1,column=0,sticky="nw",padx=(50,0),pady=(70,0),ipadx=100)
+entry_chtMail.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Bord,text_color=couleur_Texte1,corner_radius=0)
+
+
+img_Mail2 = CTkImage(dark_image=Image.open("image/dark/MailDark.png"),light_image=Image.open("image/light/MailLight.png"))
+img_Mail2.configure(size=(90,90))
+
+label_ImgChtMail = CTkLabel(frame_chtMail,text="",image=img_Mail2)
+label_ImgChtMail.grid(row=0,column=0,sticky="n",pady=(30,0))
+
+label_MailFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_MailFleche.grid(row=2,column=0,pady=5,padx=(540,0),sticky='nw')
 
-btn_Mdp = CTkButton(frame_profil,text=f"Mot de Passe",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0)
+btn_Mdp = CTkButton(frame_profil,text=f"Mot de Passe",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1)
 btn_Mdp.grid(row=3,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
 
-label_MdpFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond)
+label_MdpFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_MdpFleche.grid(row=3,column=0,pady=5,padx=(540,0),sticky='nw')
 
 def choix_fichier() :
