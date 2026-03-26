@@ -1,6 +1,6 @@
 from customtkinter import *
 from CTkListbox import CTkListbox
-from tkinter import PhotoImage
+from tkinter import PhotoImage,filedialog
 from PIL import Image
 import time
 import os
@@ -93,10 +93,12 @@ def switch_theme():
 def red_fen(event) :
     if lBox_Recherche.winfo_ismapped() :
         lBox_Recherche.place(x=fenetre.winfo_width()/2-240,y=60)
+    if frame_chtPrenom.winfo_ismapped() :
+        frame_chtPrenom.place(x=fenetre.winfo_width()/4,y=fenetre.winfo_height()/5)
         
 def creer_compte() :
     label_Error.configure(text="")
-    
+
     mdp = entry_MdP1.get()
     mail = entry_Mail1.get()
     prenom = entry_Profil2.get()
@@ -366,7 +368,7 @@ img_Profil = CTkImage(light_image=Image.open("image/light/ProfilLight.png"),dark
 img_Loupe = CTkImage(Image.open("image/icone-loupe-gris.png"))
 img_Accueil = CTkImage(light_image=Image.open("image/light/AccueilLight.png"),dark_image=Image.open("image/dark/AccueilDark.png"))
 
-label_Accueil = CTkLabel(frameBarreSuperieur,image=img_Profil,text="")
+label_Accueil = CTkLabel(frameBarreSuperieur,image=img_Profil,text="",corner_radius=10)
 btn_Frame = CTkButton(frameBarreSuperieur,text="",image=img_Accueil,command = lambda: show_frame(frameMenuPrincipal))
 
 entry_barreRecherche = CTkEntry(frame_BarreRecherche,placeholder_text="Rechercher une application")
@@ -555,25 +557,91 @@ frame_Parametres = CTkFrame(frameMenuPrincipal)
 
 frame_Parametres.grid(row=0,column=1,sticky="nsew")
 frame_Parametres.grid_columnconfigure(0,weight=1)
-frame_Parametres.grid_rowconfigure(0,weight=1)
+frame_Parametres.grid_rowconfigure(0,weight=0)
 frame_Parametres.grid_rowconfigure(1,weight=1)
-frame_Parametres.grid_rowconfigure(2,weight=1)
-frame_Parametres.grid_rowconfigure(3,weight=5)
+frame_Parametres.grid_rowconfigure(2,weight=0)
+frame_Parametres.grid_rowconfigure(3,weight=1)
 frame_Parametres.configure(fg_color=couleur_Fond)
 
 
-label_1 = CTkLabel(frame_Parametres,text="Général")
-label_1.configure(font=CTkFont("Arial",size=20),padx=30,pady=30)
-label_1.grid(row=0,column=0,sticky="nw")
+label_gen = CTkLabel(frame_Parametres,text="Général")
+label_gen.configure(font=CTkFont("Arial",size=20),padx=30,pady=30)
+label_gen.grid(row=0,column=0,sticky="nw")
 
-label_2 = CTkLabel(frame_Parametres,text="Profil")
-label_2.configure(font=CTkFont("Arial",size=20),padx=30,pady=30)
-label_2.grid(row=2,column=0,sticky="w")
+frame_gen = CTkFrame(frame_Parametres,fg_color=couleur_Fond2)
+frame_gen.grid(row=1,column=0,sticky="nsew",padx=(10,20),pady=(0,10))
+frame_gen.grid_rowconfigure(0,weight=1)
+frame_gen.grid_columnconfigure(0,weight=1)
 
-
-switch_Theme = CTkSwitch(frame_Parametres, text ="Sombre/Clair",command=switch_theme)
+switch_Theme = CTkSwitch(frame_gen, text ="Sombre/Clair",command=switch_theme)
 switch_Theme.configure(text_color="white")
-switch_Theme.grid(row=1,column=0,pady=40)
+switch_Theme.grid(row=0,column=0,sticky="nsew")
+
+
+
+label_profil = CTkLabel(frame_Parametres,text="Profil")
+label_profil.configure(font=CTkFont("Arial",size=20),padx=30,pady=30)
+label_profil.grid(row=2,column=0,sticky="w")
+
+frame_profil = CTkFrame(frame_Parametres,fg_color=couleur_Fond2)
+frame_profil.grid(row=3,column=0,sticky="nsew",padx=(10,20),pady=(0,10))
+frame_profil.grid_rowconfigure(0,weight=0)
+frame_profil.grid_rowconfigure(1,weight=0)
+frame_profil.grid_rowconfigure(2,weight=0)
+frame_profil.grid_rowconfigure(3,weight=0)
+frame_profil.grid_rowconfigure(4,weight=1)
+frame_profil.grid_columnconfigure(0,weight=1)
+
+label_infoProfil = CTkLabel(frame_profil,text="Informations Personnelles")
+label_infoProfil.grid(row=0,column=0,sticky="nw",padx=6,pady=3)
+
+def afficher_chtProfil() :
+    frame_chtPrenom.place(x=fenetre.winfo_screenwidth()/4,y=fenetre.winfo_screenheight()/5,relwidth=0.4,relheight=0.4)
+    
+def masquer_chtProfil() :
+    frame_chtPrenom.place_forget() 
+
+btn_Prenom = CTkButton(frame_profil,text=f"Prénom",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,command=afficher_chtProfil)
+btn_Prenom.grid(row=1,column=0,padx=20,pady=5,sticky="nw",ipadx=200)  
+
+frame_chtPrenom = CTkFrame(frame_Parametres,fg_color=couleur_Fond,border_width=3,border_color=couleur_Surbrillance)
+frame_chtPrenom.grid_rowconfigure(0,weight=1)
+frame_chtPrenom.grid_columnconfigure(0,weight=1)
+
+btn_Annuler = CTkButton(frame_chtPrenom,text="Annuler",command=masquer_chtProfil)
+btn_Annuler.grid(row=0,column=0,sticky="es",padx=(0,10),pady=(0,10))
+
+label_ImgCht = CTkLabel(frame_chtPrenom,image=img_Profil)
+label_ImgCht.grid(row=0,column=0)
+
+
+label_PrenomFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond)
+label_PrenomFleche.grid(row=1,column=0,pady=5,padx=(540,0),sticky='nw')
+
+btn_Mail = CTkButton(frame_profil,text=f"Mail",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0)
+btn_Mail.grid(row=2,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
+
+label_MailFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond)
+label_MailFleche.grid(row=2,column=0,pady=5,padx=(540,0),sticky='nw')
+
+btn_Mdp = CTkButton(frame_profil,text=f"Mot de Passe",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0)
+btn_Mdp.grid(row=3,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
+
+label_MdpFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond)
+label_MdpFleche.grid(row=3,column=0,pady=5,padx=(540,0),sticky='nw')
+
+def choix_fichier() :
+    chemin = filedialog.askopenfilenames(title="Choisir un fichier",filetypes=[("Images",'*.png *.jpg')])
+    
+    img_Profil2 = CTkImage(Image.open(chemin[0]))
+    img_Profil2.configure(size=(45,45))
+    
+    label_Accueil.configure(image=img_Profil2)
+    
+
+btn_choixImgProfil = CTkButton(frame_profil,text="Image de profil",command=choix_fichier)
+btn_choixImgProfil.grid(row=4,column=0)
+
 
 
 # FRAME AIDE
