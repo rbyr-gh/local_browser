@@ -11,6 +11,8 @@ import re
 
 from applications.app_morpion import frame_Morpion
 from applications.app_calculatrice import frame_Calculatrice
+from applications.app_snake import frame_Snake
+from applications.app_notes import frame_Note
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -495,10 +497,10 @@ chronoImage = CTkImage(Image.open("image/Chrono.png"))
 btn_chronoImage = CTkButton(frame_ScrollApp, image=chronoImage, text="Chrono", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
 snakeImage = CTkImage(light_image=Image.open("image/Snake.png"))
-btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance)
+btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Snake))
 
 notesImage = CTkImage(light_image=Image.open("image/Notes.png"))
-btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance)
+btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance,  command=lambda:show_frame(frame_Note))
 
 morpionImage = CTkImage(light_image=Image.open("image/Morpion.png"))
 btn_morpionImage = CTkButton(frame_ScrollApp, image=morpionImage, text="Morpion", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Morpion))
@@ -680,10 +682,19 @@ frame_Morpion.grid_rowconfigure(2,weight=9)
 frame_Calculatrice = frame_Calculatrice(framePrincipal)
 frame_Calculatrice.grid(row=1,column=0,sticky="nsew")
 
+# FRAME APP SNAKE
+
+frame_Snake = frame_Snake(framePrincipal)
+frame_Snake.grid(row=1,column=0,sticky="nsew")
+
+# FRAME APP NOTES
+
+frame_Note = frame_Note(framePrincipal)
+frame_Note.grid(row=1,column=0,sticky="nsew")
+
 
 
 show_frame(frame_Connexion)
 update_grid()
 fenetre.bind("<Configure>",red_fen)
 fenetre.mainloop()
- 
