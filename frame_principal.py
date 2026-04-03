@@ -13,6 +13,7 @@ from applications.app_morpion import frame_Morpion
 from applications.app_calculatrice import frame_Calculatrice
 from applications.app_snake import frame_Snake
 from applications.app_notes import frame_Note
+from applications.app_chatbot import frame_Chatbot
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -517,7 +518,12 @@ btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_colo
 calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
 btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Calculatrice))
 
-L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_calculatriceImage]
+chatbotImage = CTkImage(light_image=Image.open("image/ChatBot.png"))
+btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Chatbot))
+
+
+
+L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_calculatriceImage, btn_chatbotImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -542,6 +548,9 @@ btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_colo
 
 calculatriceImage.configure(size=(90, 90))
 btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+chatbotImage.configure(size=(90, 90))
+btn_chatbotImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
 
@@ -691,6 +700,11 @@ frame_Snake.grid(row=1,column=0,sticky="nsew")
 
 frame_Note = frame_Note(framePrincipal)
 frame_Note.grid(row=1,column=0,sticky="nsew")
+
+# FRAME APP CHATBOT
+
+frame_Chatbot = frame_Chatbot(framePrincipal)
+frame_Chatbot.grid(row=1,column=0,sticky="nsew")
 
 
 

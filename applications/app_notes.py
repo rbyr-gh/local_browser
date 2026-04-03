@@ -15,6 +15,27 @@ couleur_Bord = (white,black)
 couleur_Texte1 = (white,black)
 couleur_Texte2 = ("grey26","grey80")
 
+# Création d'un nouveau widget
+
+class BoutonNote(ctk.CTkFrame):
+    def __init__(self, parent, nom, on_delete=None, on_click=None):
+        super().__init__(parent, fg_color="transparent")
+
+        # Bouton principal 
+        self.btn = ctk.CTkButton(self, text=nom, height=35, anchor="w",fg_color="transparent", text_color="DeepPink3",border_width=3, border_color="DeepPink3",hover_color=("gray85", "gray25"),command=on_click)
+        self.btn.pack(side="left", fill="x", expand=True, pady=2)
+
+        # Bouton supprimer
+        self.btn_delete = ctk.CTkButton(self, text="✕", width=30, height=35,fg_color="transparent", text_color="DeepPink3",hover_color=("gray85", "gray25"),command=lambda: self.supprimer(on_delete))
+        self.btn_delete.pack(side="right", pady=2)
+
+    def supprimer(self, on_delete):
+        if on_delete:
+            on_delete()       # callback personnalisé (ex: retirer de la liste)
+        self.destroy() 
+
+# Class de fonctionnement l'app Notes
+
 class frame_Note(ctk.CTkFrame):
 
     def __init__(self, parent):
@@ -40,7 +61,7 @@ class frame_Note(ctk.CTkFrame):
         titre = ctk.CTkLabel(frame_menu_note, text="MES NOTES", text_color="DeepPink3", font=ctk.CTkFont(size=20))
         titre.grid(row=0, column=0, columnspan=2, padx=10, pady=(20,10), sticky="n")
 
-        notes = ["Note 1", "Note 2", "Note 3"]  
+        notes = ["Note 1", "Note 2", "Note 3"]  # à récupérer avec le fichier notes.txt'
 
         def charger_note(nom):
             textbox.delete("1.0", "end")
@@ -49,8 +70,10 @@ class frame_Note(ctk.CTkFrame):
         scrollable.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)  
 
         for nom in notes:
-            btn = ctk.CTkButton(scrollable, text=nom, height=35, anchor="w", fg_color="transparent", text_color=("black", "white"), hover_color=("gray85", "gray25"), command=lambda n=nom: charger_note(n))
-            btn.pack(pady=2, fill="x")
+            def on_delete(n=nom):
+                notes.remove(n)
+            bouton = BoutonNote(scrollable, nom=nom, on_delete=on_delete, on_click=lambda n=nom: charger_note(n))
+            bouton.pack(fill="x", padx=5, pady=2)
 
         btn_create_notes = ctk.CTkButton(frame_menu_note, text="+", text_color="DeepPink3", border_width=3, border_color="DeepPink3", fg_color="transparent", hover_color=("gray85", "gray25"), command=lambda : create_notes(parent, scrollable, notes))
         btn_create_notes.grid(row=2, column=0, padx=5, pady=10)
@@ -83,9 +106,18 @@ class frame_Note(ctk.CTkFrame):
                 nom = entry.get()
                 if nom.strip():
                     L.append(nom)
-                    btn_note = ctk.CTkButton(scrollable, text=nom, height=35, anchor="w", text_color="DeepPink3", border_width=3, border_color="DeepPink3", fg_color="transparent", hover_color=("gray85", "gray25"))
-                    btn_note.pack(pady=2, fill="x")
-                    fenetre_create_note.destroy()  
+                    def on_delete(n=nom):
+                        L.remove(n)
+                    bouton = BoutonNote(scrollable, nom=nom, on_delete=on_delete, on_click=lambda n=nom: charger_note(n))
+                    bouton.pack(fill="x", padx=5, pady=2)
+                    fenetre_create_note.destroy() 
 
-            btn = ctk.CTkButton(fenetre_create_note, text="Valider", text_color="DeepPink3", border_width=3, border_color="DeepPink3", fg_color="transparent", hover_color=("gray85", "gray25"), command=valider)
+            btn = ctk.CTkButton(fenetre_create_note, text="Valider", text_color="DeepPink3", border_width=3, border_color="DeepPink3", fg_color="transparent", hover_color=("gray85", "gray25"), command=lambda :valider(L))
             btn.pack(pady=5)
+
+        def Lire_notes_txt():
+            pass
+
+        def Ecrire_notes_tkt():
+            pass
+
