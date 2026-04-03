@@ -7,12 +7,22 @@ import os
 from math import ceil
 from csv import *
 import re
+import webbrowser
+import webview
 
+# Bloc notes - exportation pdf
+# Suivi crypto & actions
+# Carte interactive
+# Jeu trading
+# Chatbot
+# Gestionnaire de tâches
 
 from applications.app_morpion import frame_Morpion
 from applications.app_chrono import frame_Chrono
 from applications.app_snake import frame_Snake
 from applications.app_mastermind import frame_Mastermind
+from applications.app_notes import frame_Notes
+from applications.app_calculatrice import frame_Calculatrice
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -48,6 +58,9 @@ fenetre.iconphoto(True,icon)
 global ws
 global hs
 global profil
+global utilisateur
+
+utilisateur = ['admin','admin','admin']
 
 profil = ""
 ws = fenetre.winfo_screenwidth()
@@ -89,9 +102,11 @@ def switch_theme():
     if theme == "dark":
         set_appearance_mode("light")
         theme = "light"
+        frame_Notes.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
     else:
         set_appearance_mode("dark")
         theme = 'dark'
+        frame_Notes.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
         
 def red_fen(event) :
     if lBox_Recherche.winfo_ismapped() :
@@ -260,6 +275,10 @@ btn_CreerCompte.configure(fg_color=couleur_Fond,hover_color=couleur_Surbrillance
 label_ErrorC = CTkLabel(frame_C2,text="")
 label_ErrorC.grid(row=5,column=0,padx=(50,0),sticky='wn')
 label_ErrorC.configure(text_color="red")
+
+entry_Mail.bind("<Return>",lambda event :entry_MdP.focus_force())
+entry_MdP.bind("<Return>",lambda event :connexion())
+
     
 
 ## FRAME CREATION COMPTE
@@ -407,7 +426,7 @@ optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 
 ## RESULTAT RECHERCHE
 def recherche(texte) :
-    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono"]
+    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice"]
     if texte == "" :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
@@ -426,10 +445,40 @@ def on_select() :
     selection = lBox_Recherche.get()
     if selection == "Morpion" :
         show_frame(frame_Morpion)
-    
+    if selection == "Chrono" :
+        show_frame(frame_Chrono)
+    if selection == "Mastermind" :
+        show_frame(frame_Mastermind)
+    if selection == "Snake" :
+        show_frame(frame_Snake)
+    if selection == "Notes" :
+        show_frame(frame_Notes)
+    if selection == "Wiki" :
+        pass
+    if selection == "Messages" :
+        pass
+    if selection == "Contacts" :
+        pass
+    if selection == "Calculatrice" :
+        show_frame(frame_Calculatrice)
+        
     entry_barreRecherche.delete(0,'end')
     lBox_Recherche.place_forget()
     fenetre.focus_force()
+
+def on_entry() :
+    recherche = entry_barreRecherche.get() 
+    if len(recherche) > 9 :
+        if recherche[0:7] == "search:" :
+            if len(recherche) > 10 :
+                if recherche[7:10] == 'www' :
+                    resultat = recherche[7:].replace(" ","")
+                    webbrowser.open(f'{resultat}')
+                else :
+                    resultat = recherche[7:].replace(" ","+")
+                    webbrowser.open(f'www.google.com/search?q={resultat}')
+    entry_barreRecherche.delete(0,'end')
+        
 
 lBox_Recherche = CTkListbox(fenetre)
 lBox_Recherche._scrollbar.configure(button_color=couleur_Fond2,button_hover_color=couleur_Fond2)
@@ -438,8 +487,7 @@ lBox_Recherche.configure(fg_color=couleur_Fond2,corner_radius=0,bg_color="transp
 lBox_Recherche.configure(text_color=couleur_Texte1,width=400,hover_color=couleur_Surbrillance)
 
 lBox_Recherche.bind("<<ListboxSelect>>",lambda event : on_select())
-
-
+entry_barreRecherche.bind("<Return>",lambda event : on_entry())
 entry_barreRecherche.bind("<KeyRelease>",lambda event: recherche(entry_barreRecherche.get()))
 
 ## MENU PRINCIPAL 
@@ -505,7 +553,7 @@ snakeImage = CTkImage(light_image=Image.open("image/Snake.png"))
 btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Snake))
 
 notesImage = CTkImage(light_image=Image.open("image/Notes.png"))
-btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance)
+btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Notes))
 
 morpionImage = CTkImage(light_image=Image.open("image/Morpion.png"))
 btn_morpionImage = CTkButton(frame_ScrollApp, image=morpionImage, text="Morpion", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Morpion))
@@ -522,7 +570,10 @@ btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_colo
 mastermindImage = CTkImage(light_image=Image.open("image/Mastermind.png"))
 btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Mastermind", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Mastermind))
 
-L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_mastermindImage]
+calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
+btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Calculatrice))
+
+L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -550,6 +601,10 @@ btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_colo
 
 mastermindImage.configure(size=(90, 90))
 btn_mastermindImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+calculatriceImage.configure(size=(90, 90))
+btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
 
@@ -588,14 +643,17 @@ label_gen.grid(row=0,column=0,sticky="nw")
 
 frame_gen = CTkFrame(frame_Parametres,fg_color=couleur_Fond2)
 frame_gen.grid(row=1,column=0,sticky="nsew",padx=(10,20),pady=(0,10))
-frame_gen.grid_rowconfigure(0,weight=1)
+frame_gen.grid_rowconfigure(0,weight=0)
+frame_gen.grid_rowconfigure(1,weight=0)
 frame_gen.grid_columnconfigure(0,weight=1)
 
-switch_Theme = CTkSwitch(frame_gen, text ="Sombre/Clair",command=switch_theme)
-switch_Theme.configure(text_color="white")
-switch_Theme.grid(row=0,column=0,sticky="nsew")
+label_infoProfil = CTkLabel(frame_gen,text="Personalisation")
+label_infoProfil.grid(row=0,column=0,sticky="nw",padx=20,pady=3)
 
+switch_Theme = CTkSwitch(frame_gen, text ="Sombre/Clair",command=switch_theme,button_color=couleur_Bouton2,progress_color=couleur_Bouton2,text_color=couleur_Texte1)
+switch_Theme.grid(row=1,column=0,sticky="nw",padx=25)
 
+               
 
 label_profil = CTkLabel(frame_Parametres,text="Profil")
 label_profil.configure(font=CTkFont("Arial",size=20),padx=30,pady=30)
@@ -607,7 +665,8 @@ frame_profil.grid_rowconfigure(0,weight=0)
 frame_profil.grid_rowconfigure(1,weight=0)
 frame_profil.grid_rowconfigure(2,weight=0)
 frame_profil.grid_rowconfigure(3,weight=0)
-frame_profil.grid_rowconfigure(4,weight=1)
+frame_profil.grid_rowconfigure(4,weight=0)
+frame_profil.grid_rowconfigure(5,weight=0)
 frame_profil.grid_columnconfigure(0,weight=1)
 
 label_infoProfil = CTkLabel(frame_profil,text="Informations Personnelles")
@@ -627,7 +686,9 @@ def modification_profil(modif_entree) :
         masquer_frameCht(frame_chtMail)
         pass
     
-    else :
+    elif modif_entree == 3 :
+        nouvel_utilisateur = [utilisateur[0],utilisateur[1],entry_chtMdP.get()]
+        masquer_frameCht(frame_chtMdP)
         pass
     
     lignes = []
@@ -652,6 +713,8 @@ def afficher_frameCht(frame) :
         entry_chtPrenom.insert(0,f"{utilisateur[0]}")
     if frame == frame_chtMail :
         entry_chtMail.insert(0,f"{utilisateur[1]}")
+    if frame == frame_chtMdP :
+        entry_chtMdP.insert(0,f"{utilisateur[2]}")
     
 def masquer_frameCht(frame) :
     frame.place_forget() 
@@ -659,6 +722,8 @@ def masquer_frameCht(frame) :
         entry_chtPrenom.delete(0,"end")
     if frame == frame_chtMail :
         entry_chtMail.delete(0,"end")
+    if frame == frame_chtMdP :
+        entry_chtMdP.delete(0,'end')
     
 ## PRENOM    
 
@@ -696,6 +761,7 @@ label_ImgCht.grid(row=0,column=0,sticky="n",pady=(30,0))
 label_PrenomFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_PrenomFleche.grid(row=1,column=0,pady=5,padx=(540,0),sticky='nw')
 
+## MAIL
 
 btn_Mail = CTkButton(frame_profil,text=f"Mail",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1,command= lambda:afficher_frameCht(frame_chtMail))
 btn_Mail.grid(row=2,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
@@ -731,8 +797,38 @@ label_ImgChtMail.grid(row=0,column=0,sticky="n",pady=(30,0))
 label_MailFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_MailFleche.grid(row=2,column=0,pady=5,padx=(540,0),sticky='nw')
 
-btn_Mdp = CTkButton(frame_profil,text=f"Mot de Passe",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1)
+## MDP
+
+btn_Mdp = CTkButton(frame_profil,text=f"Mot de passe",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1,command= lambda:afficher_frameCht(frame_chtMdP))
 btn_Mdp.grid(row=3,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
+
+frame_chtMdP = CTkFrame(frame_Parametres,fg_color=couleur_Fond,border_width=1,border_color=couleur_Bord,corner_radius=0)
+frame_chtMdP.grid_rowconfigure(0,weight=0)
+frame_chtMdP.grid_rowconfigure(1,weight=1)
+frame_chtMdP.grid_rowconfigure(2,weight=1)
+frame_chtMdP.grid_columnconfigure(0,weight=1)
+
+btn_Valider3 = CTkButton(frame_chtMdP,text="Valider",command= lambda: modification_profil(3))
+btn_Valider3.grid(row=2,column=0,sticky='es',padx=(0,10),pady=(0,10))
+btn_Valider3.configure(fg_color=couleur_Bouton2,border_color=couleur_Bord,text_color=couleur_Texte1,hover_color=couleur_Surbrillance,border_width=0)
+
+btn_Annuler3 = CTkButton(frame_chtMdP,text="Annuler",command= lambda : masquer_frameCht(frame_chtMdP))
+btn_Annuler3.grid(row=2,column=0,sticky="es",padx=(0,160),pady=(0,10))
+btn_Annuler3.configure(fg_color=couleur_Fond,border_color=couleur_Bord,text_color=couleur_Texte1,hover_color=couleur_Surbrillance,border_width=1)
+
+label_MdP = CTkLabel(frame_chtMdP,text="Mot de passe",font=("Arial",24,"bold"))
+label_MdP.grid(row=1,column=0,sticky='nw',padx=(60,0),pady=(20,0))
+
+entry_chtMdP = CTkEntry(frame_chtMdP,placeholder_text="Mot de passe")
+entry_chtMdP.grid(row=1,column=0,sticky="nw",padx=(50,0),pady=(70,0),ipadx=100)
+entry_chtMdP.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Bord,text_color=couleur_Texte1,corner_radius=0)
+
+
+img_MdP2 = CTkImage(dark_image=Image.open("image/dark/CadenaDark.png"),light_image=Image.open("image/light/CadenaLight.png"))
+img_MdP2.configure(size=(90,90))
+
+label_ImgChtMdP = CTkLabel(frame_chtMdP,text="",image=img_MdP2)
+label_ImgChtMdP.grid(row=0,column=0,sticky="n",pady=(30,0))
 
 label_MdpFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_MdpFleche.grid(row=3,column=0,pady=5,padx=(540,0),sticky='nw')
@@ -745,11 +841,14 @@ def choix_fichier() :
     
     label_Accueil.configure(image=img_Profil2)
     
+label_personalisation = CTkLabel(frame_profil,text="Personalisation")
+label_personalisation.grid(row=4,column=0,sticky="nw",padx=20,pady=(20,0))
 
-btn_choixImgProfil = CTkButton(frame_profil,text="Image de profil",command=choix_fichier)
-btn_choixImgProfil.grid(row=4,column=0)
+btn_choixImgProfil = CTkButton(frame_profil,text="Image de profil",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1,command=choix_fichier)
+btn_choixImgProfil.grid(row=5,column=0,sticky='nw',ipadx=200,padx=20,pady=5)
 
-
+label_ImgProfilFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
+label_ImgProfilFleche.grid(row=5,column=0,pady=5,padx=(540,0),sticky='nw')
 
 # FRAME AIDE
 
@@ -762,7 +861,7 @@ frame_Aide.grid_rowconfigure(1,weight=1)
 label_1 = CTkLabel(frame_Aide,text="Aide")
 label_1.grid(row=0,column=0,sticky="w")
 
-# FRAME APP 1
+# FRAME APP MORPION
 
 frame_Morpion = frame_Morpion(framePrincipal)
 
@@ -774,28 +873,36 @@ frame_Morpion.grid_rowconfigure(0,weight=0)
 frame_Morpion.grid_rowconfigure(1,weight=3)
 frame_Morpion.grid_rowconfigure(2,weight=9)
 
-# FRAME APP 2
+# FRAME APP CHRONO
 
 frame_Chrono = frame_Chrono(framePrincipal)
 frame_Chrono.grid(row=1,column=0,sticky="nsew")
 
 
-# FRAME APP 3
+# FRAME APP SNAKE
 
 frame_Snake = frame_Snake(framePrincipal)
 frame_Snake.grid(row=1,column=0,sticky="nsew")
 
-# FRAME APP 4
+# FRAME APP MASTERMIND
 
 frame_Mastermind = frame_Mastermind(framePrincipal)
 frame_Mastermind.grid(row=1,column=0,sticky="nsew")
 
+# FRAME APP NOTES
 
+frame_Notes = frame_Notes(framePrincipal)
+frame_Notes.grid(row=1,column=0,sticky="nsew")
+frame_Notes.grid_rowconfigure(0,weight=0)
+frame_Notes.grid_rowconfigure(1,weight=1)
+frame_Notes.grid_columnconfigure(0,weight=1)
 
+# FRAME CALCULATRICE
 
+frame_Calculatrice = frame_Calculatrice(framePrincipal)
+frame_Calculatrice.grid(row=1,column=0,sticky="nsew")
 
-
-show_frame(frame_Connexion)
+show_frame(framePrincipal)
 update_grid()
 fenetre.bind("<Configure>",red_fen)
 fenetre.mainloop()
