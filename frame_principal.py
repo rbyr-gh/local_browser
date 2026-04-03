@@ -14,8 +14,9 @@ import webview
 # Suivi crypto & actions
 # Carte interactive
 # Jeu trading
+# Robot aideur
 # Chatbot
-# Gestionnaire de tâches
+# Gestionnaire de tâches (rappels)
 
 from applications.app_morpion import frame_Morpion
 from applications.app_chrono import frame_Chrono
@@ -185,7 +186,7 @@ def connexion() :
  
 
         
-## FRAME CONNEXION 
+## FRAME CONNEXION x
 
 frame_Connexion = CTkFrame(fenetre)
 
