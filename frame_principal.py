@@ -24,6 +24,7 @@ from applications.app_snake import frame_Snake
 from applications.app_mastermind import frame_Mastermind
 from applications.app_notes import frame_Notes
 from applications.app_calculatrice import frame_Calculatrice
+from applications.app_chatbot import frame_Chatbot
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -427,7 +428,7 @@ optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 
 ## RESULTAT RECHERCHE
 def recherche(texte) :
-    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice"]
+    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice","chatbot"]
     if texte == "" :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
@@ -462,6 +463,8 @@ def on_select() :
         pass
     if selection == "Calculatrice" :
         show_frame(frame_Calculatrice)
+    if selection == "Chatbot" :
+        show_frame(frame_Chatbot)
         
     entry_barreRecherche.delete(0,'end')
     lBox_Recherche.place_forget()
@@ -574,7 +577,10 @@ btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Ma
 calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
 btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Calculatrice))
 
-L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage]
+chatbotImage = CTkImage(light_image=Image.open("image/ChatBot.png"))
+btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Chatbot))
+
+L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage,btn_chatbotImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -605,6 +611,9 @@ btn_mastermindImage.configure(height=100,width=100,compound="top",anchor="s",tex
 
 calculatriceImage.configure(size=(90, 90))
 btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+chatbotImage.configure(size=(90, 90))
+btn_chatbotImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
@@ -902,6 +911,11 @@ frame_Notes.grid_columnconfigure(0,weight=1)
 
 frame_Calculatrice = frame_Calculatrice(framePrincipal)
 frame_Calculatrice.grid(row=1,column=0,sticky="nsew")
+
+# FRAME APP CHATBOT
+
+frame_Chatbot = frame_Chatbot(framePrincipal)
+frame_Chatbot.grid(row=1,column=0,sticky="nsew")
 
 show_frame(framePrincipal)
 update_grid()
