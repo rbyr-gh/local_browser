@@ -2,21 +2,18 @@ from customtkinter import *
 from CTkListbox import CTkListbox
 from tkinter import PhotoImage,filedialog
 from PIL import Image
-import time
-import os
 from math import ceil
 from csv import *
+import time
+import os
 import re
 import webbrowser
 import webview
 
-# Bloc notes - exportation pdf
-# Suivi crypto & actions
-# Carte interactive
-# Jeu trading
-# Robot aideur
-# Chatbot
-# Gestionnaire de tâches (rappels)
+
+from user import app_User
+from couleur import *
+
 
 from applications.app_morpion import frame_Morpion
 from applications.app_chrono import frame_Chrono
@@ -26,28 +23,32 @@ from applications.app_notes import frame_Notes
 from applications.app_calculatrice import frame_Calculatrice
 from applications.app_chatbot import frame_Chatbot
 
-# Style ---------------------------------
-# text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
-# fg_color      : couleur du premier plan      "color"
-# bg_color      : couleur du fond              "color"
-# hover_color   : couleur de survol            "color"
-# font          : police et taille du texte   ("Arial",14,"Bold")
-# corner_radius : arrondi des coins            int
-# border_width  : largeur de la bordure        int
-# border_color  : couleur de la bordure        "color"
+#-------------- TO DO --------------# 
 
-black = "gray90"
-white = "gray15"
+# Bloc notes - exportation pdf ( à finir)
+# Suivi crypto & actions
+# Carte interactive
+# Jeu trading
+# Robot aideur
+# Chatbot - Enregistrement des conversations / Différent chatbots & modeles /
+# Gestionnaire de tâches (rappels)
 
-couleur_Fond2 = ("grey95","grey23")
-couleur_Fond = (black,"grey15")
-couleur_Widget = ("grey74","grey43")
-couleur_Bouton1 = (black,"grey3")
-couleur_Bouton2 = ("DarkOrange1","DarkOrange3")
-couleur_Surbrillance =("grey74","grey43")
-couleur_Bord = (white,black)
-couleur_Texte1 = (white,black)
-couleur_Texte2 = ("grey26","grey80")
+# Redemarrer tout lors d'une deconnexion 
+# Redimensionnement fenetre
+# Parametres enregistrerà
+
+
+
+
+#-------------- INIT FENETRES --------------# 
+
+global frame_morpion
+global frame_chrono
+global frame_snake
+global frame_mastermind
+global frame_notes
+global frame_calculatrice
+global frame_chatbot
 
 set_appearance_mode("dark")
 theme = "dark"
@@ -59,12 +60,12 @@ fenetre.iconphoto(True,icon)
 
 global ws
 global hs
-global profil
-global utilisateur
 
-utilisateur = ['admin','admin','admin']
+path = ""
 
+utilisateur = []
 profil = ""
+
 ws = fenetre.winfo_screenwidth()
 hs = fenetre.winfo_screenheight()
 fenetre.geometry(f"{ws}x{hs}")
@@ -74,6 +75,12 @@ fenetre.maxsize(ws,hs)
 fenetre.grid_rowconfigure(0,weight=1)
 fenetre.grid_columnconfigure(0,weight=1)
 
+
+
+
+
+#-------------- FRAME PRINCIPAL --------------# 
+
 framePrincipal = CTkFrame(fenetre,fg_color=couleur_Fond)
 framePrincipal.rowconfigure(0,weight=0)
 framePrincipal.rowconfigure(1,weight=1)
@@ -81,11 +88,12 @@ framePrincipal.columnconfigure(0,weight=1)
 framePrincipal.grid(row=0,column=0,sticky="nsew")
 
 
-# FONCTION CHANGEMENT DE FRAME 
 
-def show_frame_app(frame) :
-    frame.tkraise()
-    
+
+
+
+#-------------- FONCTIONS --------------# 
+
 def show_frame(frame) :
     label_Error.configure(text="")
     label_ErrorC.configure(text="")
@@ -138,12 +146,22 @@ def creer_compte() :
                     spamreader = reader(csvfile, delimiter=",")
                     for row in spamreader :
                         L.append(row[1])
+                
                 if mail in L :
                     label_Error.configure(text="Adresse mail déja existante")
                 else :
                     with open('local/identifiant.csv','a',newline='') as csvfile :
                         ecrire=writer(csvfile)
                         ecrire.writerow([prenom,mail,mdp])
+                    global path
+                    
+                    csvfile.close()
+                    
+                    path = f"user/{mail}"
+                    os.makedirs(path,exist_ok=True)
+                    os.makedirs(path + "/notes",exist_ok=True)
+                    os.makedirs(path + "/conv",exist_ok=True)
+                    os.makedirs(path + "/settings",exist_ok=True)
                     csvfile.close()
                     show_frame(frame_Connexion)
                     entry_MdP1.delete(0,"end")
@@ -153,6 +171,16 @@ def creer_compte() :
 def connexion() :
     global profil
     global utilisateur
+    global path
+    
+    global frame_morpion
+    global frame_chrono
+    global frame_snake
+    global frame_mastermind
+    global frame_notes
+    global frame_calculatrice
+    global frame_chatbot
+    
     label_ErrorC.configure(text="")
     
     mdp = entry_MdP.get()
@@ -179,15 +207,82 @@ def connexion() :
         label_ErrorC.configure(text="Ce compte n'existe pas")
     else :
         optionMenu_Profil.configure(text=prenom)
-        show_frame(framePrincipal)
         entry_MdP.delete(0,"end")
         entry_Mail.delete(0,"end")
+    
+        path = f"user/{mail}"
+        app_User.path = path
         
+        # FRAME APP MORPION
+
+        frame_morpion = frame_Morpion(framePrincipal)
+
+        frame_morpion.configure(fg_color=couleur_Fond)
+
+        frame_morpion.grid(row=1,column=0,sticky="nsew")
+        frame_morpion.grid_columnconfigure(0,weight=1)
+        frame_morpion.grid_rowconfigure(0,weight=0)
+        frame_morpion.grid_rowconfigure(1,weight=3)
+        frame_morpion.grid_rowconfigure(2,weight=9)
+
+        # FRAME APP CHRONO
+
+        frame_chrono = frame_Chrono(framePrincipal)
+        frame_chrono.grid(row=1,column=0,sticky="nsew")
+
+
+        # FRAME APP SNAKE
+
+        frame_snake = frame_Snake(framePrincipal)
+        frame_snake.grid(row=1,column=0,sticky="nsew")
+
+        # FRAME APP MASTERMIND
+
+        frame_mastermind = frame_Mastermind(framePrincipal)
+        frame_mastermind.grid(row=1,column=0,sticky="nsew")
+
+        # FRAME APP NOTES
+
+        frame_notes = frame_Notes(framePrincipal)
+        frame_notes.grid(row=1,column=0,sticky="nsew")
+        frame_notes.grid_rowconfigure(0,weight=0)
+        frame_notes.grid_rowconfigure(1,weight=1)
+        frame_notes.grid_columnconfigure(0,weight=1)
+
+        # FRAME CALCULATRICE
+
+        frame_calculatrice = frame_Calculatrice(framePrincipal)
+        frame_calculatrice.grid(row=1,column=0,sticky="nsew")
+
+        # FRAME APP CHATBOT
+
+        frame_chatbot = frame_Chatbot(framePrincipal)
+        frame_chatbot.grid(row=1,column=0,sticky="nsew")
+        frame_chatbot.grid_rowconfigure(0,weight=1)
+        frame_chatbot.grid_columnconfigure(0,weight=0)
+        frame_chatbot.grid_columnconfigure(1,weight=1)
         
+        show_frame(framePrincipal)
+        
+    
+def deconnexion() :
+    show_frame(frame_Connexion)
+    
+    frame_morpion.destroy()
+    frame_chrono.destroy()
+    frame_snake.destroy()
+    frame_mastermind.destroy()
+    frame_notes.destroy()
+    frame_calculatrice.destroy()
+    frame_chatbot.destroy()
+    
+    
+        
+   
  
 
         
-## FRAME CONNEXION x
+#-------------- FRAME CONNEXION --------------# 
 
 frame_Connexion = CTkFrame(fenetre)
 
@@ -203,7 +298,6 @@ frame_C1.grid(row=0,column=0,sticky="nsew")
 frame_C1.configure(fg_color=couleur_Texte1,corner_radius=0)
 frame_C1.grid_columnconfigure(0,weight=1)
 frame_C1.grid_rowconfigure(0,weight=1)
-
 img_Connexion = CTkImage(Image.open("image/imageConnexion.jpg"))
 img_Connexion.configure(size=(ws,hs))
 
@@ -281,9 +375,13 @@ label_ErrorC.configure(text_color="red")
 entry_Mail.bind("<Return>",lambda event :entry_MdP.focus_force())
 entry_MdP.bind("<Return>",lambda event :connexion())
 
+
+
+
+
     
 
-## FRAME CREATION COMPTE
+#-------------- FRAME CREATION COMPTE --------------# 
 
 frame_CreationCompte = CTkFrame(fenetre)
 
@@ -379,7 +477,13 @@ label_Error = CTkLabel(frame_CC2,text="")
 label_Error.grid(row=4,column=0,padx=(50,0),sticky='wn')
 label_Error.configure(text_color="red")
 
-## BARRE DU HAUT
+
+
+
+
+
+#-------------- FP - BARRE DU HAUT --------------# 
+
 frameBarreSuperieur = CTkFrame(framePrincipal,fg_color=couleur_Fond2)
 frameBarreSuperieur.grid(row=0,column=0,sticky="ew")
 
@@ -426,7 +530,13 @@ entry_barreRecherche.grid(row=0,column=0,pady=5,padx=(100,0),sticky="nsew")
 label_Loupe.grid(row=0,column=0,padx=20,pady=10,sticky="e")
 optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 
-## RESULTAT RECHERCHE
+
+
+
+
+
+#-------------- FP - BARRE DE RECHERCHE --------------#
+
 def recherche(texte) :
     L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice","chatbot"]
     if texte == "" :
@@ -446,15 +556,15 @@ def recherche(texte) :
 def on_select() :
     selection = lBox_Recherche.get()
     if selection == "Morpion" :
-        show_frame(frame_Morpion)
+        show_frame(frame_morpion)
     if selection == "Chrono" :
-        show_frame(frame_Chrono)
+        show_frame(frame_chrono)
     if selection == "Mastermind" :
-        show_frame(frame_Mastermind)
+        show_frame(frame_mastermind)
     if selection == "Snake" :
-        show_frame(frame_Snake)
+        show_frame(frame_snake)
     if selection == "Notes" :
-        show_frame(frame_Notes)
+        show_frame(frame_notes)
     if selection == "Wiki" :
         pass
     if selection == "Messages" :
@@ -462,9 +572,9 @@ def on_select() :
     if selection == "Contacts" :
         pass
     if selection == "Calculatrice" :
-        show_frame(frame_Calculatrice)
+        show_frame(frame_calculatrice)
     if selection == "Chatbot" :
-        show_frame(frame_Chatbot)
+        show_frame(frame_chatbot)
         
     entry_barreRecherche.delete(0,'end')
     lBox_Recherche.place_forget()
@@ -494,7 +604,12 @@ lBox_Recherche.bind("<<ListboxSelect>>",lambda event : on_select())
 entry_barreRecherche.bind("<Return>",lambda event : on_entry())
 entry_barreRecherche.bind("<KeyRelease>",lambda event: recherche(entry_barreRecherche.get()))
 
-## MENU PRINCIPAL 
+
+
+
+
+
+#-------------- FP - MENU PRINCIPAL --------------#
 
 frameMenuPrincipal = CTkFrame(framePrincipal,fg_color=couleur_Fond)
 frameMenuPrincipal.grid(row=1,column=0,sticky="nsew")
@@ -502,7 +617,12 @@ frameMenuPrincipal.grid_columnconfigure(0,weight=0)
 frameMenuPrincipal.grid_columnconfigure(1,weight=5)
 frameMenuPrincipal.grid_rowconfigure(0,weight=1)
 
-## MENU LATERAL 
+
+
+
+
+
+#-------------- FP - MENU LATERAL --------------#
 
 frame_MenuLateral = CTkFrame(frameMenuPrincipal)
 
@@ -519,7 +639,7 @@ img_Deconnexion = CTkImage(dark_image=Image.open("image/dark/DeconnexionDark.png
 
 btn_Settings = CTkButton(frame_MenuLateral, text="",image = img_Settings,command= lambda: show_frame(frame_Parametres))
 btn_Help = CTkButton(frame_MenuLateral, text="",image=img_Help, command = lambda: show_frame(frame_Aide))
-btn_Deconnexion = CTkButton(frame_MenuLateral,text="",image=img_Deconnexion,command = lambda : show_frame(frame_Connexion))
+btn_Deconnexion = CTkButton(frame_MenuLateral,text="",image=img_Deconnexion,command = lambda : deconnexion())
 
 frame_MenuLateral.configure(fg_color=couleur_Fond2)
 
@@ -535,7 +655,12 @@ btn_Settings.grid(row=1,column=1,padx=(10,10),pady=10)
 btn_Help.grid(row=2,column=1,padx=(10,10),sticky="n")
 btn_Deconnexion.grid(row=3,column=1,padx=(10,10),sticky="s",pady=10)
 
-## MENU APPLICATIONS
+
+
+
+
+
+#-------------- FP - MENU APPLICATIONS --------------#
 
 frame_MenuApplications = CTkFrame(frameMenuPrincipal)
 
@@ -551,16 +676,16 @@ frame_ScrollApp.grid(row=1,column=0,padx=5,pady=5,sticky="nsew")
 label_App.grid(row=0,column=0,padx=10,pady=5)
 
 chronoImage = CTkImage(Image.open("image/Chrono.png"))
-btn_chronoImage = CTkButton(frame_ScrollApp, image=chronoImage, text="Chrono", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Chrono))
+btn_chronoImage = CTkButton(frame_ScrollApp, image=chronoImage, text="Chrono", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_chrono))
 
 snakeImage = CTkImage(light_image=Image.open("image/Snake.png"))
-btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Snake))
+btn_snakeImage = CTkButton(frame_ScrollApp, image=snakeImage, text="Snake", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_snake))
 
 notesImage = CTkImage(light_image=Image.open("image/Notes.png"))
-btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Notes))
+btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_notes))
 
 morpionImage = CTkImage(light_image=Image.open("image/Morpion.png"))
-btn_morpionImage = CTkButton(frame_ScrollApp, image=morpionImage, text="Morpion", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Morpion))
+btn_morpionImage = CTkButton(frame_ScrollApp, image=morpionImage, text="Morpion", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_morpion))
 
 contactsImage = CTkImage(light_image=Image.open("image/Contacts.png"))
 btn_contactsImage = CTkButton(frame_ScrollApp, image=contactsImage, text="Contacts", fg_color= "transparent",hover_color=couleur_Surbrillance)
@@ -572,13 +697,13 @@ wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
 btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
 mastermindImage = CTkImage(light_image=Image.open("image/Mastermind.png"))
-btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Mastermind", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Mastermind))
+btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Mastermind", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_mastermind))
 
 calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
-btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Calculatrice))
+btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_calculatrice))
 
 chatbotImage = CTkImage(light_image=Image.open("image/ChatBot.png"))
-btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_Chatbot))
+btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_chatbot))
 
 L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage,btn_chatbotImage]
 
@@ -634,7 +759,12 @@ def update_grid(event=None):
         
 frame_ScrollApp.bind("<Configure>", update_grid)
 
-# FRAME PARAMETRES 
+
+
+
+
+
+#-------------- FP - FRAME PARAMETRES --------------# 
 
 frame_Parametres = CTkFrame(frameMenuPrincipal)
 
@@ -734,9 +864,10 @@ def masquer_frameCht(frame) :
         entry_chtMail.delete(0,"end")
     if frame == frame_chtMdP :
         entry_chtMdP.delete(0,'end')
-    
-## PRENOM    
-
+        
+        
+## FRAME PARAMETRES PRENOM        
+      
 btn_Prenom = CTkButton(frame_profil,text="Prénom",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,command= lambda: afficher_frameCht(frame_chtPrenom),text_color=couleur_Texte1)
 btn_Prenom.grid(row=1,column=0,padx=20,pady=5,sticky="nw",ipadx=200)  
 
@@ -771,7 +902,9 @@ label_ImgCht.grid(row=0,column=0,sticky="n",pady=(30,0))
 label_PrenomFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_PrenomFleche.grid(row=1,column=0,pady=5,padx=(540,0),sticky='nw')
 
-## MAIL
+
+
+## FRAME PARAMETRES MAIL
 
 btn_Mail = CTkButton(frame_profil,text=f"Mail",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1,command= lambda:afficher_frameCht(frame_chtMail))
 btn_Mail.grid(row=2,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
@@ -807,7 +940,10 @@ label_ImgChtMail.grid(row=0,column=0,sticky="n",pady=(30,0))
 label_MailFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_MailFleche.grid(row=2,column=0,pady=5,padx=(540,0),sticky='nw')
 
-## MDP
+
+
+
+## FRAME PARAMATRES MDP
 
 btn_Mdp = CTkButton(frame_profil,text=f"Mot de passe",fg_color=couleur_Fond,hover_color=couleur_Fond,anchor="w",border_width=0,text_color=couleur_Texte1,command= lambda:afficher_frameCht(frame_chtMdP))
 btn_Mdp.grid(row=3,column=0,padx=20,pady=5,sticky="nw",ipadx=200)
@@ -860,7 +996,10 @@ btn_choixImgProfil.grid(row=5,column=0,sticky='nw',ipadx=200,padx=20,pady=5)
 label_ImgProfilFleche = CTkLabel(frame_profil,text=">",fg_color=couleur_Fond,bg_color=couleur_Fond,text_color=couleur_Texte1)
 label_ImgProfilFleche.grid(row=5,column=0,pady=5,padx=(540,0),sticky='nw')
 
-# FRAME AIDE
+
+
+
+#-------------- FP - FRAME AIDE --------------#
 
 frame_Aide = CTkFrame(frameMenuPrincipal)
 
@@ -871,53 +1010,11 @@ frame_Aide.grid_rowconfigure(1,weight=1)
 label_1 = CTkLabel(frame_Aide,text="Aide")
 label_1.grid(row=0,column=0,sticky="w")
 
-# FRAME APP MORPION
-
-frame_Morpion = frame_Morpion(framePrincipal)
-
-frame_Morpion.configure(fg_color=couleur_Fond)
-
-frame_Morpion.grid(row=1,column=0,sticky="nsew")
-frame_Morpion.grid_columnconfigure(0,weight=1)
-frame_Morpion.grid_rowconfigure(0,weight=0)
-frame_Morpion.grid_rowconfigure(1,weight=3)
-frame_Morpion.grid_rowconfigure(2,weight=9)
-
-# FRAME APP CHRONO
-
-frame_Chrono = frame_Chrono(framePrincipal)
-frame_Chrono.grid(row=1,column=0,sticky="nsew")
 
 
-# FRAME APP SNAKE
+#-------------- INITIALISATION --------------#
 
-frame_Snake = frame_Snake(framePrincipal)
-frame_Snake.grid(row=1,column=0,sticky="nsew")
-
-# FRAME APP MASTERMIND
-
-frame_Mastermind = frame_Mastermind(framePrincipal)
-frame_Mastermind.grid(row=1,column=0,sticky="nsew")
-
-# FRAME APP NOTES
-
-frame_Notes = frame_Notes(framePrincipal)
-frame_Notes.grid(row=1,column=0,sticky="nsew")
-frame_Notes.grid_rowconfigure(0,weight=0)
-frame_Notes.grid_rowconfigure(1,weight=1)
-frame_Notes.grid_columnconfigure(0,weight=1)
-
-# FRAME CALCULATRICE
-
-frame_Calculatrice = frame_Calculatrice(framePrincipal)
-frame_Calculatrice.grid(row=1,column=0,sticky="nsew")
-
-# FRAME APP CHATBOT
-
-frame_Chatbot = frame_Chatbot(framePrincipal)
-frame_Chatbot.grid(row=1,column=0,sticky="nsew")
-
-show_frame(framePrincipal)
+show_frame(frame_Connexion)
 update_grid()
 fenetre.bind("<Configure>",red_fen)
 fenetre.mainloop()

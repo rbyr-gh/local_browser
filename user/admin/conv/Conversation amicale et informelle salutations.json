@@ -1,0 +1,26 @@
+[
+    {
+        "role": "user",
+        "content": "Salut\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Bonjour. Comment puis-je vous aider aujourd'hui ?"
+    },
+    {
+        "role": "user",
+        "content": "Salut\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Salut ! Comment ça va ? Qu'est-ce que je peux faire pour toi ?"
+    },
+    {
+        "role": "user",
+        "content": "Salut\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Salut encore ! Ça commence à être un petit jeu de salutations, n'est-ce pas ? Qu'est-ce que tu as envie de discuter aujourd'hui ?"
+    }
+]

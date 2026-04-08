@@ -1,0 +1,10 @@
+[
+    {
+        "role": "user",
+        "content": "Donne moi la liste des 20 plus grosses entreprises mondiales\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Voici la liste des 20 plus grosses entreprises mondiales en fonction de leur capitalisation boursière (en milliards de dollars américains) :\n\nNote : Les chiffres sont sujets à variation en fonction de la source et de la date de mise à jour. Les données suivantes sont basées sur les informations disponibles en 2023.\n\n1. Apple (États-Unis) - 2 350 milliards de dollars\n2. Microsoft (États-Unis) - 2 330 milliards de dollars\n3. Alphabet (Google) (États-Unis) - 1 340 milliards de dollars\n4. Amazon (États-Unis) - 1 230 milliards de dollars\n5. Tesla (États-Unis) - 830 milliards de dollars\n6. Berkshire Hathaway (États-Unis) - 740 milliards de dollars\n7. Meta Platforms (Facebook) (États-Unis) - 650 milliards de dollars\n8. NVIDIA (États-Unis) - 640 milliards de dollars\n9. Toyota (Japon) - 630 milliards de dollars\n10. UnitedHealth Group (États-Unis) - 590 milliards de dollars\n11. McDonald's (États-Unis) - 560 milliards de dollars\n12. Procter & Gamble (États-Unis) - 550 milliards de dollars\n13. Coca-Cola (États-Unis) - 540 milliards de dollars\n14. Intel (États-Unis) - 530 milliards de dollars\n15. Visa (États-Unis) - 520 milliards de dollars\n16. Walmart (États-Unis) - 510 milliards de dollars\n17. Chevron (États-Unis) - 490 milliards de dollars\n18. ExxonMobil (États-Unis) - 480 milliards de dollars\n19. Johnson & Johnson (États-Unis) - 470 milliards de dollars\n20. Royal Dutch Shell (Pays-Bas) - 460 milliards de dollars\n\nRemarque : Cette liste peut varier en fonction de la source et de la méthode de calcul utilisée pour déterminer la capitalisation boursière."
+    }
+]
