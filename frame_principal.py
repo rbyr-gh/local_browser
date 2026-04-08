@@ -22,6 +22,7 @@ from applications.app_mastermind import frame_Mastermind
 from applications.app_notes import frame_Notes
 from applications.app_calculatrice import frame_Calculatrice
 from applications.app_chatbot import frame_Chatbot
+from applications.app_simon import frame_Simon
 
 #-------------- TO DO --------------# 
 
@@ -33,9 +34,10 @@ from applications.app_chatbot import frame_Chatbot
 # Chatbot - Enregistrement des conversations / Différent chatbots & modeles /
 # Gestionnaire de tâches (rappels)
 
-# Redemarrer tout lors d'une deconnexion 
-# Redimensionnement fenetre
-# Parametres enregistrerà
+# Redimensionnement fenetre (Morpion, Chatbot, Simon, Mastermind)
+# Parametres enregistrer
+# Snake à améliorer
+
 
 
 
@@ -55,8 +57,15 @@ theme = "dark"
 
 fenetre = CTk()
 fenetre.title("ESEOFOX")
-icon = PhotoImage(file="image/IconBitMap_ESEOFOX.png")
-fenetre.iconphoto(True,icon)
+
+sys_exp = os.name
+
+if sys_exp == "nt" :
+    fenetre.iconbitmap(r"image/logoApplication/IconBitMap_ESEOFOX.ico")
+else :
+    icon = PhotoImage(file="image/logoApplication/IconBitMap_ESEOFOX.png")
+    fenetre.iconphoto(True,icon)
+
 
 global ws
 global hs
@@ -123,6 +132,8 @@ def red_fen(event) :
         lBox_Recherche.place(x=fenetre.winfo_width()/2-300,y=60)
     if frame_chtPrenom.winfo_ismapped() :
         frame_chtPrenom.place(x=fenetre.winfo_width()/4,y=fenetre.winfo_height()/5)
+    ws = fenetre.winfo_screenwidth()
+    hs = fenetre.winfo_screenheight()
         
 def creer_compte() :
     label_Error.configure(text="")
@@ -180,6 +191,7 @@ def connexion() :
     global frame_notes
     global frame_calculatrice
     global frame_chatbot
+    global frame_simon
     
     label_ErrorC.configure(text="")
     
@@ -261,6 +273,11 @@ def connexion() :
         frame_chatbot.grid_rowconfigure(0,weight=1)
         frame_chatbot.grid_columnconfigure(0,weight=0)
         frame_chatbot.grid_columnconfigure(1,weight=1)
+        
+        # FRAME APP SIMON
+        
+        frame_simon = frame_Simon(framePrincipal)
+        frame_simon.grid(row=1,column=0,sticky="nsew")
         
         show_frame(framePrincipal)
         
@@ -538,7 +555,7 @@ optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 #-------------- FP - BARRE DE RECHERCHE --------------#
 
 def recherche(texte) :
-    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice","chatbot"]
+    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice","chatbot","simon"]
     if texte == "" :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
@@ -575,6 +592,8 @@ def on_select() :
         show_frame(frame_calculatrice)
     if selection == "Chatbot" :
         show_frame(frame_chatbot)
+    if selection == "Simon" :
+        show_frame(frame_simon)
         
     entry_barreRecherche.delete(0,'end')
     lBox_Recherche.place_forget()
@@ -705,7 +724,10 @@ btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text
 chatbotImage = CTkImage(light_image=Image.open("image/ChatBot.png"))
 btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_chatbot))
 
-L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage,btn_chatbotImage]
+simonImage = CTkImage(light_image=Image.open("image/Simon.png"))
+btn_simonImage = CTkButton(frame_ScrollApp, image=simonImage, text="Simon", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_simon))
+
+L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage,btn_chatbotImage,btn_simonImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -739,6 +761,9 @@ btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",t
 
 chatbotImage.configure(size=(90, 90))
 btn_chatbotImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+simonImage.configure(size=(90, 90))
+btn_simonImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
