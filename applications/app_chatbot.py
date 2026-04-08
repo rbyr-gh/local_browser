@@ -7,19 +7,16 @@ import os
 from math import ceil
 from csv import *
 import re
-import webbrowser
-import webview
 import threading
-from user import app_User
+from local.user import app_User
 import json
 
 from openai import OpenAI
-import openai
 from google import genai
 from groq import Groq
 from anthropic import Anthropic
 
-# Supprimer conversion
+# Supprimer conversation
 # Changer de modele
 
 black = "gray90"
@@ -40,6 +37,7 @@ couleur_Texte2 = ("grey26","grey80")
 class frame_Chatbot(CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.parent = parent
         
         
         # INITIALISATION 
@@ -115,8 +113,12 @@ class frame_Chatbot(CTkFrame):
         self.frame_Conversation.grid_rowconfigure(1,weight=8)
         self.frame_Conversation.grid_rowconfigure(2,weight=0)
         
+        self.label_titreConv = CTkLabel(self.frame_Conversation,text="")
+        self.label_titreConv.grid(row=0,column=0,padx=(0,20),sticky="e")
+        self.label_titreConv.configure(font=CTkFont("Arial",13,"normal"))
+        
         self.entry_Message = CTkTextbox(self.frame_Conversation)
-        self.entry_Message.grid(row=2,column=0,ipadx=400,ipady=10,sticky="ew",padx=300,pady=(0,40))
+        self.entry_Message.grid(row=2,column=0,ipadx=400,ipady=10,sticky="ew",padx=int(parent.winfo_width()*0.10),pady=(0,40))
         self.entry_Message.configure(border_width=0,height=10,corner_radius=20,fg_color=couleur_Fond)
         
         self.option_Modele = CTkOptionMenu(self.frame_Conversation,values=["ChatGPT","Gemini","Claude","Groq"])
@@ -127,8 +129,9 @@ class frame_Chatbot(CTkFrame):
         self.option_Variante.grid(row=0,column=0,sticky='nw',padx=170,pady=10)
         self.option_Variante.configure(fg_color=couleur_Fond2,button_color=couleur_Fond2,button_hover_color=couleur_Fond2,font=CTkFont("Arial",12,"bold"),text_color=couleur_Texte1)
         
+        
         self.button_Envoyer = CTkButton(self.frame_Conversation,text="▲",command=lambda:self.envoyer_texte())
-        self.button_Envoyer.grid(row=2,column=0,sticky="e",padx=(0,330),pady=(0,40))
+        self.button_Envoyer.grid(row=2,column=0,sticky="e",padx=(0,int(parent.winfo_width()*0.11)),pady=(0,40))
         self.button_Envoyer.configure(height=40,width=40,corner_radius=10,fg_color=couleur_Texte1,text_color=couleur_Bouton1,bg_color=couleur_Fond,hover_color=couleur_Surbrillance)
         
         self.frame_Conversation = CTkScrollableFrame(self.frame_Conversation)
@@ -137,6 +140,7 @@ class frame_Chatbot(CTkFrame):
         self.frame_Conversation.grid_columnconfigure(0,weight=1)
         
         self.entry_Message.bind("<Return>",lambda event :self.envoyer_texte())
+        self.bind("<Configure>",self.red_fen)
         
 
         
@@ -153,6 +157,7 @@ class frame_Chatbot(CTkFrame):
         if len(self.conversation) == 1 :
             self.titre_Conv = self.groq_titre(f"Donne un titre court (5-8 mots) pour cette conversation basée sur le premier message :'{self.message}' Seul le titre, pas de texte supplémentaire. Attention ! : Il doit être différents d'au moins un caractere de ceux qu'il y a dans cette liste : {self.liste_conversation_sansJson}")
             self.listbox_conversation.insert("end",self.titre_Conv)
+            self.label_titreConv.configure(text=self.titre_Conv)
         
         self.entry_Message.delete("1.0","end")
         self.entry_Message.mark_set("insert","1.0")
@@ -271,6 +276,8 @@ class frame_Chatbot(CTkFrame):
             self.conversation = json.load(f)    
         
         self.titre_Conv = selection
+        
+        self.label_titreConv.configure(text=selection)
             
         for i in range(len(self.conversation)) :
             self.nbMsgConv += 1
@@ -296,8 +303,16 @@ class frame_Chatbot(CTkFrame):
             widget.destroy()
         self.listbox_conversation.update_idletasks()
         self.listbox_conversation._parent_canvas.yview_moveto(1.0)    
+        self.label_titreConv(text='')
             
+    # -------- REDIMENSIONNEMENT FENETRE --------     
     
+    def red_fen(self,event) :
+        for index in range(len(self.frame_Conversation.winfo_children())) :
+            if index % 2 != 0 :
+                self.frame_Conversation.winfo_children()[index].configure(wraplength=int(self.frame_Conversation.winfo_width()*0.8))   
+        self.button_Envoyer.grid(padx=(0,int(self.parent.winfo_width()*0.11)))
+        self.entry_Message.grid(padx=int(self.parent.winfo_width()*0.10))
         
                 
             

@@ -1,3 +1,11 @@
+# --------- PREMIER LANCEMENT ----------
+import pip  
+try :
+    import groq
+except ImportError :       
+    pip.main(["install","-r","local/requirements.txt"])
+
+# --------- IMPORT EXTERNE ----------
 from customtkinter import *
 from CTkListbox import CTkListbox
 from tkinter import PhotoImage,filedialog
@@ -8,38 +16,31 @@ import time
 import os
 import re
 import webbrowser
-import webview
 
 
-from user import app_User
-from couleur import *
-
-
+# ---------- IMPORT INTERNE ----------
+from local.user import app_User
+from local.couleur import *
 from applications.app_morpion import frame_Morpion
 from applications.app_chrono import frame_Chrono
 from applications.app_snake import frame_Snake
-from applications.app_mastermind import frame_Mastermind
 from applications.app_notes import frame_Notes
 from applications.app_calculatrice import frame_Calculatrice
 from applications.app_chatbot import frame_Chatbot
 from applications.app_simon import frame_Simon
 
+
+
 #-------------- TO DO --------------# 
 
-# Bloc notes - exportation pdf ( à finir)
 # Suivi crypto & actions
 # Carte interactive
 # Jeu trading
 # Robot aideur
-# Chatbot - Enregistrement des conversations / Différent chatbots & modeles /
 # Gestionnaire de tâches (rappels)
 
-# Redimensionnement fenetre (Morpion, Chatbot, Simon, Mastermind)
-# Parametres enregistrer
+# Parametres enregistrer : clair/sombre, chemin image 
 # Snake à améliorer
-
-
-
 
 
 #-------------- INIT FENETRES --------------# 
@@ -47,7 +48,6 @@ from applications.app_simon import frame_Simon
 global frame_morpion
 global frame_chrono
 global frame_snake
-global frame_mastermind
 global frame_notes
 global frame_calculatrice
 global frame_chatbot
@@ -63,7 +63,7 @@ sys_exp = os.name
 if sys_exp == "nt" :
     fenetre.iconbitmap(r"image/logoApplication/IconBitMap_ESEOFOX.ico")
 else :
-    icon = PhotoImage(file="image/logoApplication/IconBitMap_ESEOFOX.png")
+    icon = PhotoImage(file="image/logoApplication/Logo.png")
     fenetre.iconphoto(True,icon)
 
 
@@ -121,11 +121,11 @@ def switch_theme():
     if theme == "dark":
         set_appearance_mode("light")
         theme = "light"
-        frame_Notes.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
+        frame_notes.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
     else:
         set_appearance_mode("dark")
         theme = 'dark'
-        frame_Notes.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
+        frame_notes.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
         
 def red_fen(event) :
     if lBox_Recherche.winfo_ismapped() :
@@ -187,11 +187,12 @@ def connexion() :
     global frame_morpion
     global frame_chrono
     global frame_snake
-    global frame_mastermind
     global frame_notes
     global frame_calculatrice
     global frame_chatbot
     global frame_simon
+    
+    global theme
     
     label_ErrorC.configure(text="")
     
@@ -221,6 +222,7 @@ def connexion() :
         optionMenu_Profil.configure(text=prenom)
         entry_MdP.delete(0,"end")
         entry_Mail.delete(0,"end")
+        
     
         path = f"user/{mail}"
         app_User.path = path
@@ -248,11 +250,6 @@ def connexion() :
         frame_snake = frame_Snake(framePrincipal)
         frame_snake.grid(row=1,column=0,sticky="nsew")
 
-        # FRAME APP MASTERMIND
-
-        frame_mastermind = frame_Mastermind(framePrincipal)
-        frame_mastermind.grid(row=1,column=0,sticky="nsew")
-
         # FRAME APP NOTES
 
         frame_notes = frame_Notes(framePrincipal)
@@ -279,7 +276,14 @@ def connexion() :
         frame_simon = frame_Simon(framePrincipal)
         frame_simon.grid(row=1,column=0,sticky="nsew")
         
+        #frame_notes.update_idletasks()
+        #heme="dark"-----------changement clair/sombre
+        #switch_theme()
+        entry_MdP.delete(0,"end")
+        entry_Mail.delete(0,"end")
+        
         show_frame(framePrincipal)
+        
         
     
 def deconnexion() :
@@ -288,7 +292,6 @@ def deconnexion() :
     frame_morpion.destroy()
     frame_chrono.destroy()
     frame_snake.destroy()
-    frame_mastermind.destroy()
     frame_notes.destroy()
     frame_calculatrice.destroy()
     frame_chatbot.destroy()
@@ -555,7 +558,7 @@ optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 #-------------- FP - BARRE DE RECHERCHE --------------#
 
 def recherche(texte) :
-    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","mastermind","calculatrice","chatbot","simon"]
+    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","calculatrice","chatbot","simon"]
     if texte == "" :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
@@ -576,8 +579,6 @@ def on_select() :
         show_frame(frame_morpion)
     if selection == "Chrono" :
         show_frame(frame_chrono)
-    if selection == "Mastermind" :
-        show_frame(frame_mastermind)
     if selection == "Snake" :
         show_frame(frame_snake)
     if selection == "Notes" :
@@ -706,17 +707,14 @@ btn_notesImage = CTkButton(frame_ScrollApp, image=notesImage, text="Notes", fg_c
 morpionImage = CTkImage(light_image=Image.open("image/Morpion.png"))
 btn_morpionImage = CTkButton(frame_ScrollApp, image=morpionImage, text="Morpion", fg_color= "transparent",hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_morpion))
 
-contactsImage = CTkImage(light_image=Image.open("image/Contacts.png"))
-btn_contactsImage = CTkButton(frame_ScrollApp, image=contactsImage, text="Contacts", fg_color= "transparent",hover_color=couleur_Surbrillance)
+#contactsImage = CTkImage(light_image=Image.open("image/Contacts.png"))
+#btn_contactsImage = CTkButton(frame_ScrollApp, image=contactsImage, text="Contacts", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
-messagesImage = CTkImage(light_image=Image.open("image/Messages.png"))
-btn_messagesImage = CTkButton(frame_ScrollApp, image=messagesImage, text="Messages", fg_color= "transparent",hover_color=couleur_Surbrillance)
+#messagesImage = CTkImage(light_image=Image.open("image/Messages.png"))
+#btn_messagesImage = CTkButton(frame_ScrollApp, image=messagesImage, text="Messages", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
-wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
-btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
-
-mastermindImage = CTkImage(light_image=Image.open("image/Mastermind.png"))
-btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Mastermind", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_mastermind))
+#wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
+#btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
 calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
 btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_calculatrice))
@@ -727,7 +725,7 @@ btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot"
 simonImage = CTkImage(light_image=Image.open("image/Simon.png"))
 btn_simonImage = CTkButton(frame_ScrollApp, image=simonImage, text="Simon", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_simon))
 
-L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_mastermindImage,btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage,btn_chatbotImage,btn_simonImage]
+L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_calculatriceImage,btn_notesImage,btn_chatbotImage,btn_simonImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -741,20 +739,17 @@ btn_notesImage.configure(height=100,width=100,compound="top",anchor="s",text_col
 morpionImage.configure(size=(90, 90))
 btn_morpionImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
-contactsImage.configure(size=(90, 90))
-btn_contactsImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+#contactsImage.configure(size=(90, 90))
+#btn_contactsImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
-messagesImage.configure(size=(90, 90))
-btn_messagesImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+#messagesImage.configure(size=(90, 90))
+#btn_messagesImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
-wikiImage.configure(size=(90, 90))
-btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+#wikiImage.configure(size=(90, 90))
+#btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
-wikiImage.configure(size=(90, 90))
-btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
-
-mastermindImage.configure(size=(90, 90))
-btn_mastermindImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+#wikiImage.configure(size=(90, 90))
+#btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 calculatriceImage.configure(size=(90, 90))
 btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -775,7 +770,7 @@ frame_ScrollApp.configure(fg_color=couleur_Fond,corner_radius=0)
 
 def update_grid(event=None):
     width = frame_ScrollApp.winfo_width()
-    cols = max(1, width // 120)
+    cols = max(1, width // 120) - 1
 
     for i, btn in enumerate(L):
         row = i // cols

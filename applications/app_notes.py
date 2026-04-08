@@ -1,10 +1,11 @@
 from customtkinter import *
 from CTkListbox import CTkListbox
+import local.customtkinter_modifie as tb_modif
 from tkinter import PhotoImage
 import os
 from PIL import Image
 import json
-from user import app_User
+from local.user import app_User
 
 black = "gray90"
 white = "gray15"
@@ -153,7 +154,7 @@ class frame_Notes(CTkFrame):
     
         ## PAGE 
         
-        self.textbox_Page = CTkTextbox(self)
+        self.textbox_Page = tb_modif.CTkTextbox(self)
         self.textbox_Page.configure(corner_radius=0,fg_color="white",text_color="white",border_width=3,border_color=couleur_Texte1)
         
         self.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)

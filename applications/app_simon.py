@@ -1,17 +1,7 @@
 import customtkinter as ctk
 import random
+from local.couleur import *
 
-# =============================
-# 🔹 COULEURS (comme tes autres jeux)
-# =============================
-couleur_Fond = ("black","grey15")
-couleur_Bouton = ("DarkOrange1","DarkOrange3")
-couleur_Surbrillance = ("grey74","grey43")
-
-
-# =============================
-# 🔹 FRAME SIMON
-# =============================
 class frame_Simon(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent, fg_color=couleur_Fond)
@@ -22,9 +12,6 @@ class frame_Simon(ctk.CTkFrame):
         self.reponse_joueur = []
         self.couleurs = ["green", "red", "yellow", "blue"]
 
-        # =============================
-        # 🔹 LABEL NIVEAU
-        # =============================
         self.labelSimon = ctk.CTkLabel(
             self,
             text=f"NIVEAU {self.niveau}",
@@ -32,9 +19,6 @@ class frame_Simon(ctk.CTkFrame):
         )
         self.labelSimon.pack(pady=20)
 
-        # =============================
-        # 🔹 BOUTONS
-        # =============================
         self.grid_frame = ctk.CTkFrame(self, fg_color=couleur_Fond)
         self.grid_frame.pack()
 
@@ -48,15 +32,13 @@ class frame_Simon(ctk.CTkFrame):
         self.bouton_jaune.grid(row=1, column=0, padx=10, pady=10)
         self.bouton_bleu.grid(row=1, column=1, padx=10, pady=10)
 
-        # =============================
-        # 🔹 REJOUER
-        # =============================
         self.btn_rejouer = ctk.CTkButton(
             self,
             text="Rejouer",
             command=self.reset,
-            fg_color=couleur_Bouton,
-            hover_color=couleur_Surbrillance
+            fg_color=couleur_Bouton2,
+            hover_color=couleur_Surbrillance,
+            text_color=couleur_Texte1
         )
         self.btn_rejouer.pack(pady=20)
 
@@ -64,9 +46,6 @@ class frame_Simon(ctk.CTkFrame):
         self.ajouter_couleur()
         self.jouer_sequence()
 
-    # =============================
-    # 🔹 CREATION BOUTON
-    # =============================
     def create_btn(self, couleur, base, hover):
         return ctk.CTkButton(
             self.grid_frame,
@@ -79,9 +58,6 @@ class frame_Simon(ctk.CTkFrame):
             text=""
         )
 
-    # =============================
-    # 🔹 LOGIQUE JEU
-    # =============================
     def ajouter_couleur(self):
         self.sequence.append(random.choice(self.couleurs))
 
