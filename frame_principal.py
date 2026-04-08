@@ -13,6 +13,7 @@ from applications.app_morpion import frame_Morpion
 from applications.app_chrono import frame_Chrono
 from applications.app_snake import frame_Snake
 from applications.app_mastermind import frame_Mastermind
+from applications.app_simon import frame_Simon
 
 # Style ---------------------------------
 # text_color    : couleur du texte             "color"      Liste des couleurs : https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html
@@ -514,7 +515,10 @@ btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_colo
 mastermindImage = CTkImage(light_image=Image.open("image/Mastermind.png"))
 btn_mastermindImage = CTkButton(frame_ScrollApp, image=mastermindImage, text="Mastermind", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Mastermind))
 
-L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_mastermindImage]
+simonImage = CTkImage(light_image=Image.open("image/Simon.png"))
+btn_simonImage = CTkButton(frame_ScrollApp, image=simonImage, text="Simon", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_Simon))
+
+L=[btn_chronoImage,btn_contactsImage,btn_messagesImage,btn_morpionImage,btn_notesImage,btn_snakeImage,btn_wikiImage,btn_mastermindImage,btn_simonImage]
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -542,6 +546,9 @@ btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_colo
 
 mastermindImage.configure(size=(90, 90))
 btn_mastermindImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+
+simonImage.configure(size=(90, 90))
+btn_simonImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
 frame_MenuApplications.configure(fg_color=couleur_Fond)
 
@@ -627,6 +634,10 @@ frame_Snake.grid(row=1,column=0,sticky="nsew")
 frame_Mastermind = frame_Mastermind(framePrincipal)
 frame_Mastermind.grid(row=1,column=0,sticky="nsew")
 
+# FRAME APP 5
+
+frame_Simon = frame_Simon(framePrincipal) 
+frame_Simon.grid(row=1, column=0,sticky="nsew")
 
 
 
