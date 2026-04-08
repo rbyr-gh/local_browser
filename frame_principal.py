@@ -34,9 +34,10 @@ from applications.app_simon import frame_Simon
 # Chatbot - Enregistrement des conversations / Différent chatbots & modeles /
 # Gestionnaire de tâches (rappels)
 
-# Redemarrer tout lors d'une deconnexion 
-# Redimensionnement fenetre
-# Parametres enregistrerà
+# Redimensionnement fenetre (Morpion, Chatbot, Simon, Mastermind)
+# Parametres enregistrer
+# Snake à améliorer
+
 
 
 
@@ -56,8 +57,15 @@ theme = "dark"
 
 fenetre = CTk()
 fenetre.title("ESEOFOX")
-icon = PhotoImage(file="image/IconBitMap_ESEOFOX.png")
-fenetre.iconphoto(True,icon)
+
+sys_exp = os.name
+
+if sys_exp == "nt" :
+    fenetre.iconbitmap(r"image/logoApplication/IconBitMap_ESEOFOX.ico")
+else :
+    icon = PhotoImage(file="image/logoApplication/IconBitMap_ESEOFOX.png")
+    fenetre.iconphoto(True,icon)
+
 
 global ws
 global hs
@@ -124,6 +132,8 @@ def red_fen(event) :
         lBox_Recherche.place(x=fenetre.winfo_width()/2-300,y=60)
     if frame_chtPrenom.winfo_ismapped() :
         frame_chtPrenom.place(x=fenetre.winfo_width()/4,y=fenetre.winfo_height()/5)
+    ws = fenetre.winfo_screenwidth()
+    hs = fenetre.winfo_screenheight()
         
 def creer_compte() :
     label_Error.configure(text="")

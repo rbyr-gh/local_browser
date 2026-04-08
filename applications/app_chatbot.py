@@ -64,7 +64,6 @@ class frame_Chatbot(CTkFrame):
         for full in self.modeles_ChatGPT_full :
             self.modeles_ChatGPT_nom.append(full.id)
             
-        print(self.modeles_ChatGPT_nom)
         
         
         self.conversation = []
