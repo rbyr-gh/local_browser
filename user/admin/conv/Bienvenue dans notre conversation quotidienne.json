@@ -1,0 +1,18 @@
+[
+    {
+        "role": "user",
+        "content": "Salut\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Salut. Comment puis-je vous aider aujourd'hui ?"
+    },
+    {
+        "role": "user",
+        "content": "Donne moi le prix moyen d'un ordinateur \n"
+    },
+    {
+        "role": "assistant",
+        "content": "Le prix moyen d'un ordinateur peut varier en fonction de plusieurs facteurs tels que la marque, le modèle, les spécifications techniques et la qualité.\n\nCependant, voici quelques estimations générales de prix pour différents types d'ordinateurs :\n\n Ordinateur portable :\n + Entry-level (processeur Intel Core i3, 4 Go de RAM, disque dur de 256 Go) : 400-600 €\n + Moyen de gamme (processeur Intel Core i5, 8 Go de RAM, disque dur de 512 Go) : 700-1 000 €\n + Haute gamme (processeur Intel Core i7, 16 Go de RAM, disque dur de 1 To) : 1 200-2 000 €\n Ordinateur de bureau :\n + Entry-level (processeur Intel Core i3, 4 Go de RAM, disque dur de 256 Go) : 300-500 €\n + Moyen de gamme (processeur Intel Core i5, 8 Go de RAM, disque dur de 512 Go) : 500-900 €\n + Haute gamme (processeur Intel Core i7, 16 Go de RAM, disque dur de 1 To) : 1 000-2 500 €\n Ordinateur tout-en-un (all-in-one) :\n + Entry-level (processeur Intel Core i3, 4 Go de RAM, disque dur de 256 Go) : 500-800 €\n + Moyen de gamme (processeur Intel Core i5, 8 Go de RAM, disque dur de 512 Go) : 800-1 200 €\n + Haute gamme (processeur Intel Core i7, 16 Go de RAM, disque dur de 1 To) : 1 200-2 500 €\n\nIl est important de noter que ces sont des estimations générales et que les prix peuvent varier en fonction de la marque, du modèle et des spécifications techniques. Il est recommandé de faire des recherches et de comparer les prix avant de faire un achat."
+    }
+]

@@ -35,13 +35,13 @@ class frame_Calculatrice(ctk.CTkFrame):
         L_autre = ["C",",","←"]
         for (text, row, col) in buttons:
             if text in L_opérateur:
-                btn = ctk.CTkButton(self, text=text, fg_color= couleur_Bouton2, corner_radius= 200, command= lambda n= text: recup_valeur_bouton_entree(entry, n), hover_color=couleur_Surbrillance,font=("Arial",40,'bold'))
+                btn = ctk.CTkButton(self, text=text, text_color=couleur_Texte1, fg_color= couleur_Bouton2, corner_radius= 200, command= lambda n= text: recup_valeur_bouton_entree(entry, n), hover_color=couleur_Surbrillance,font=("Arial",40,'bold'))
                 btn.grid(row=row, column=col, padx= (10,10), pady=(10,10), sticky="nsew")
             elif text in L_autre:
-                btn = ctk.CTkButton(self, text=text, fg_color= couleur_Bouton3, corner_radius= 200, command= lambda n= text: recup_valeur_bouton_entree(entry, n), hover_color=couleur_Surbrillance,font=("Arial",40,'bold'))
+                btn = ctk.CTkButton(self, text=text,text_color=couleur_Texte1, fg_color= couleur_Bouton3, corner_radius= 200, command= lambda n= text: recup_valeur_bouton_entree(entry, n), hover_color=couleur_Surbrillance,font=("Arial",40,'bold'))
                 btn.grid(row=row, column=col, padx= (10,10), pady=(10,10), sticky="nsew")
             else :
-                btn = ctk.CTkButton(self, text=text, fg_color= couleur_Bouton1, corner_radius= 200,command= lambda n= text: recup_valeur_bouton_entree(entry, n), hover_color=couleur_Surbrillance,font=("Arial",40,'bold'))
+                btn = ctk.CTkButton(self, text=text,text_color=couleur_Texte1, fg_color= couleur_Bouton1, corner_radius= 200,command= lambda n= text: recup_valeur_bouton_entree(entry, n), hover_color=couleur_Surbrillance,font=("Arial",40,'bold'))
                 btn.grid(row=row, column=col, padx= (10,10), pady=(10,10), sticky="nsew")
 
 
