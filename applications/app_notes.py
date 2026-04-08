@@ -4,6 +4,7 @@ from tkinter import PhotoImage
 import os
 from PIL import Image
 import json
+from user import app_User
 
 black = "gray90"
 white = "gray15"
@@ -20,11 +21,14 @@ couleur_Texte2 = ("grey26","grey80")
 couleur_Texte3 = (black,white)
 
 # FONCTION : Supprimer mise en forme, Position texte, Puce, Décalage texte, Bouton coller, Appliquer un style à un ligne,enregistrement rapide
-#  ne pas ouvrir un nouveau fichier si non enregistrer
 
 class frame_Notes(CTkFrame):
     def __init__(self, parent) :
         super().__init__(parent)
+        
+        
+
+
         
         self.tag = "black"
         self.font = "Arial+012+normal+roman+0+0"
@@ -186,7 +190,7 @@ class frame_Notes(CTkFrame):
         self.textbox_Page.bind("<Button-1>",self.masquer_frame_event)
         
         self.label_NomFichier2 = CTkLabel(self,text=f"Non enregistré")
-        self.label_NomFichier2.grid(row=1,column=0,sticky="nw",padx=5)
+        self.label_NomFichier2.grid(row=1,column=0,sticky="sw",padx=5)
         
 
         
@@ -309,7 +313,7 @@ class frame_Notes(CTkFrame):
                 self.textbox_Page.tag_add(self.tag,f"{self.textbox_Page.index("insert")}-1c",self.textbox_Page.index("insert"))
                 self.textbox_Page.tag_add(self.font,f"{self.textbox_Page.index("insert")}-1c",self.textbox_Page.index("insert"))
                 self.textbox_Page.tag_add(self.background,f"{self.textbox_Page.index("insert")}-1c",self.textbox_Page.index("insert"))
-                self.label_NomFichier2.configure(text=f"Non enregistré")
+                self.label_NomFichier2.configure(text=f"{self.fichier_ouvert} - Non enregistré")
                 
             else : 
                 self.textbox_Page.tag_add(self.tag,f"{self.textbox_Page.index("insert")}-2c",self.textbox_Page.index("insert"))  
@@ -396,7 +400,7 @@ class frame_Notes(CTkFrame):
             self.label_ErreurOuvert.configure(text="")
             if self.enregistrer == 1 :
                 self.lb_Fichiers.delete(0,"END")
-                fichier = os.listdir("./notes")
+                fichier = os.listdir(app_User.path + "/notes")
                 for i in fichier : 
                     self.lb_Fichiers.insert("END",i[:-5])
                 frame.place(x=self.winfo_screenwidth()/4,y=self.winfo_screenheight()/5,relwidth=0.5,relheight=0.4)
@@ -428,7 +432,7 @@ class frame_Notes(CTkFrame):
             char = []
             
             if self.fichier_ouvert != self.entry_Enregistrer.get() and self.fichier_ouvert != "" :
-                os.remove(f"notes/{self.fichier_ouvert}.json")
+                os.remove(app_User.path + f"/notes/{self.fichier_ouvert}.json")
             
             self.fichier_ouvert = self.entry_Enregistrer.get()
                 
@@ -445,14 +449,14 @@ class frame_Notes(CTkFrame):
                 
                 indice = self.textbox_Page.index(f"{indice} + 1c")
             
-            with open(f"notes/{self.entry_Enregistrer.get()}.json","w") as f :
+            with open(app_User.path + f"/notes/{self.entry_Enregistrer.get()}.json","w") as f :
                 json.dump(char,f,indent=4,ensure_ascii=False)
             f.close()
     
     
     def ouvrir_fichier(self) :
         if self.lb_Fichiers.get() :
-            with open(f"notes/{self.lb_Fichiers.get()}.json",'r') as f :
+            with open(app_User.path + f"/notes/{self.lb_Fichiers.get()}.json",'r') as f :
                 data = json.load(f)
             f.close()
             self.textbox_Page.delete("1.0","end-1c")
@@ -500,9 +504,9 @@ class frame_Notes(CTkFrame):
                 
     def supprimer_fichier(self) :
         if self.lb_Fichiers.get() and self.lb_Fichiers.get() != self.fichier_ouvert :
-            os.remove(f'notes/{self.lb_Fichiers.get()}.json')
+            os.remove(app_User.path + f'notes/{self.lb_Fichiers.get()}.json')
             self.lb_Fichiers.delete(0,"END")
-            fichier = os.listdir("./notes")
+            fichier = os.listdir(app_User.path + "/notes")
             for i in fichier : 
                 self.lb_Fichiers.insert("END",i[:-5])
         elif self.lb_Fichiers.get() and self.lb_Fichiers.get() == self.fichier_ouvert :
