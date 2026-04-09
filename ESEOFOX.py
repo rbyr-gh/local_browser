@@ -558,7 +558,7 @@ optionMenu_Profil.grid(row=0,column=2,sticky="e",padx=85)
 #-------------- FP - BARRE DE RECHERCHE --------------#
 
 def recherche(texte) :
-    L_application = ["contacts","morpion","snake","notes","messages","wiki","chrono","calculatrice","chatbot","simon"]
+    L_application = ["morpion","snake","notes","chrono","calculatrice","chatbot","simon"]
     if texte == "" :
         lBox_Recherche.place_forget()
         lBox_Recherche.configure(height=0)
@@ -1022,14 +1022,95 @@ label_ImgProfilFleche.grid(row=5,column=0,pady=5,padx=(540,0),sticky='nw')
 #-------------- FP - FRAME AIDE --------------#
 
 frame_Aide = CTkFrame(frameMenuPrincipal)
+frame_Aide.configure(fg_color=couleur_Fond)
 
 frame_Aide.grid(row=0,column=1,sticky="nsew")
 frame_Aide.grid_columnconfigure(0,weight=1)
+frame_Aide.grid_columnconfigure(1,weight=8)
+frame_Aide.grid_rowconfigure(0,weight=0)
 frame_Aide.grid_rowconfigure(1,weight=1)
 
-label_1 = CTkLabel(frame_Aide,text="Aide")
-label_1.grid(row=0,column=0,sticky="w")
 
+label_1 = CTkLabel(frame_Aide,text="Bienvenue sur ESEOFOX, vous trouverez sur cette page tout ce qu'il y a à savoir sur notre application.",font=CTkFont("Arial",14,"bold"),text_color=couleur_Texte1)
+label_1.grid(row=0,column=0,sticky="w",padx=5,pady=5,columnspan=2)
+
+frame_questions = CTkScrollableFrame(frame_Aide)
+frame_questions.grid(row=1,column=0,sticky="nsew")
+frame_questions.configure(fg_color=couleur_Fond,scrollbar_button_color=couleur_Fond2)
+frame_questions.grid_rowconfigure(0,weight=1)
+frame_questions.grid_rowconfigure(1,weight=1)
+frame_questions.grid_rowconfigure(2,weight=1)
+frame_questions.grid_rowconfigure(3,weight=1)
+frame_questions.grid_rowconfigure(4,weight=1)
+frame_questions.grid_columnconfigure(0,weight=1)
+
+frame_reponse = CTkFrame(frame_Aide) 
+frame_reponse.grid(row=1,column=1,sticky="nsew")
+frame_reponse.configure(fg_color=couleur_Fond)
+frame_reponse.grid_rowconfigure(0,weight=1)
+frame_reponse.grid_columnconfigure(0,weight=1)
+
+#-------------- LES QUESTIONS --------------#
+#
+# <---- Modele ----> !! Ajouter dans L_Aide & L_Frame
+#
+#
+# <<--- Nom --->>
+#btn_NomA = CTkButton(frame_questions,text='',height=50)
+#btn_NomA.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Texte1,hover_color=couleur_Surbrillance,corner_radius=0,anchor="w")
+#
+#frame_NomA = CTkFrame(frame_reponse,fg_color=couleur_Fond)
+#frame_NomA.grid(row=0,column=0,sticky="nsew")
+
+
+
+
+# <<--- La barre de recherche --->>
+btn_bdrA = CTkButton(frame_questions,text='La barre de recherche et ses astuces',height=50)
+btn_bdrA.grid(row=0,column=0,sticky="nsew",ipadx=3)
+btn_bdrA.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Texte1,hover_color=couleur_Surbrillance,corner_radius=0,anchor="w")
+
+frame_bdrA = CTkFrame(frame_reponse,fg_color=couleur_Fond)
+frame_bdrA.grid(row=0,column=0,sticky="nsew")
+
+
+# <<--- Notes --->>
+btn_notesA = CTkButton(frame_questions,text='Comment utiliser notes ?',height=50)
+btn_notesA.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Texte1,hover_color=couleur_Surbrillance,corner_radius=0,anchor="w")
+
+frame_notesA = CTkFrame(frame_reponse,fg_color=couleur_Fond)
+frame_notesA.grid(row=0,column=0,sticky="nsew")
+
+
+# <<--- Chatbot --->>
+
+btn_chatBotA = CTkButton(frame_questions,text='Comment utliser le chatbot ?',height=50)
+btn_chatBotA.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Texte1,hover_color=couleur_Surbrillance,corner_radius=0,anchor="w")
+
+frame_chatBotA = CTkFrame(frame_reponse,fg_color=couleur_Fond)
+frame_chatBotA.grid(row=0,column=0,sticky="nsew")
+
+# <<--- Nom --->>
+btn_calculatriceA = CTkButton(frame_questions,text='Comment utiliser la calculatrice ?',height=50)
+btn_calculatriceA.configure(fg_color=couleur_Fond,border_width=1,border_color=couleur_Texte1,hover_color=couleur_Surbrillance,corner_radius=0,anchor="w")
+
+frame_calculatriceA = CTkFrame(frame_reponse,fg_color=couleur_Fond)
+frame_calculatriceA.grid(row=0,column=0,sticky="nsew")
+
+
+
+
+# --- Initialisation --- 
+
+L_Aide = [btn_bdrA,btn_notesA,btn_chatBotA,btn_calculatriceA]
+L_Frame = [frame_bdrA,frame_notesA,frame_chatBotA,btn_calculatriceA]
+
+row = 0
+for i in range(len(L_Aide)) :
+    L_Aide[i].grid(row=row,column=0,sticky="nsew",pady=2,ipadx=6)
+    L_Aide[i].configure(command=lambda i = i : L_Frame[i].tkraise())
+    row += 1
+    
 
 
 #-------------- INITIALISATION --------------#
