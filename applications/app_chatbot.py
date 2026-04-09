@@ -7,6 +7,10 @@ import os
 from math import ceil
 from csv import *
 import re
+<<<<<<< HEAD
+import webbrowser
+=======
+>>>>>>> 8fbfd66bafbb2127b5572688551ed3bcd9a2b9b6
 import threading
 from local.user import app_User
 import json

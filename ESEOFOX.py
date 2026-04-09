@@ -16,6 +16,14 @@ import time
 import os
 import re
 import webbrowser
+<<<<<<< HEAD:frame_principal.py
+
+
+
+from user import app_User
+from couleur import *
+=======
+>>>>>>> 8fbfd66bafbb2127b5572688551ed3bcd9a2b9b6:ESEOFOX.py
 
 
 # ---------- IMPORT INTERNE ----------
@@ -250,6 +258,10 @@ def connexion() :
         frame_snake = frame_Snake(framePrincipal)
         frame_snake.grid(row=1,column=0,sticky="nsew")
 
+<<<<<<< HEAD:frame_principal.py
+
+=======
+>>>>>>> 8fbfd66bafbb2127b5572688551ed3bcd9a2b9b6:ESEOFOX.py
         # FRAME APP NOTES
 
         frame_notes = frame_Notes(framePrincipal)
@@ -713,8 +725,13 @@ btn_morpionImage = CTkButton(frame_ScrollApp, image=morpionImage, text="Morpion"
 #messagesImage = CTkImage(light_image=Image.open("image/Messages.png"))
 #btn_messagesImage = CTkButton(frame_ScrollApp, image=messagesImage, text="Messages", fg_color= "transparent",hover_color=couleur_Surbrillance)
 
+<<<<<<< HEAD:frame_principal.py
+wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
+btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
+=======
 #wikiImage = CTkImage(light_image=Image.open("image/Wiki.png"))
 #btn_wikiImage = CTkButton(frame_ScrollApp, image=wikiImage, text="Wiki", fg_color= "transparent",hover_color=couleur_Surbrillance)
+>>>>>>> 8fbfd66bafbb2127b5572688551ed3bcd9a2b9b6:ESEOFOX.py
 
 calculatriceImage = CTkImage(light_image=Image.open("image/Calculatrice.png"))
 btn_calculatriceImage = CTkButton(frame_ScrollApp, image=calculatriceImage, text="Calculatrice", fg_color= "transparent",hover_color=couleur_Surbrillance, command=lambda:show_frame(frame_calculatrice))
@@ -725,7 +742,11 @@ btn_chatbotImage = CTkButton(frame_ScrollApp, image=chatbotImage, text="ChatBot"
 simonImage = CTkImage(light_image=Image.open("image/Simon.png"))
 btn_simonImage = CTkButton(frame_ScrollApp, image=simonImage, text="Simon", fg_color= "transparent", hover_color=couleur_Surbrillance,command=lambda:show_frame(frame_simon))
 
+<<<<<<< HEAD:frame_principal.py
+L=[btn_chronoImage,btn_morpionImage,btn_snakeImage, btn_calculatriceImage,btn_notesImage,btn_contactsImage,btn_messagesImage,btn_wikiImage,btn_chatbotImage,btn_simonImage]
+=======
 L=[btn_chronoImage,btn_morpionImage,btn_snakeImage,btn_calculatriceImage,btn_notesImage,btn_chatbotImage,btn_simonImage]
+>>>>>>> 8fbfd66bafbb2127b5572688551ed3bcd9a2b9b6:ESEOFOX.py
 
 chronoImage.configure(size=(90, 90))
 btn_chronoImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -748,8 +769,13 @@ btn_morpionImage.configure(height=100,width=100,compound="top",anchor="s",text_c
 #wikiImage.configure(size=(90, 90))
 #btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
 
+<<<<<<< HEAD:frame_principal.py
+wikiImage.configure(size=(90, 90))
+btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+=======
 #wikiImage.configure(size=(90, 90))
 #btn_wikiImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
+>>>>>>> 8fbfd66bafbb2127b5572688551ed3bcd9a2b9b6:ESEOFOX.py
 
 calculatriceImage.configure(size=(90, 90))
 btn_calculatriceImage.configure(height=100,width=100,compound="top",anchor="s",text_color=couleur_Texte1)
@@ -1121,4 +1147,3 @@ fenetre.bind("<Configure>",red_fen)
 fenetre.mainloop()
 
  
-
