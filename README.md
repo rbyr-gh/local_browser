@@ -54,63 +54,13 @@ Le développement de l’interface pourra être réalisé à l’aide de bibliot
 
     Tkinter
 
-    PyQt
+    CustomTkinter
 
 4. Fonctionnalités principales
 
 Le navigateur local intégrera plusieurs modules accessibles depuis l’interface principale.
 
-4.1 MINI ENCYCLOPEDIE (type Wikipédia)
-
-Ce module permettra de consulter une base d’articles stockés localement.
-
-Fonctionnalités :
-
-    recherche d’articles
-
-    affichage du contenu
-
-    navigation entre différentes pages
-
-    stockage des données en fichiers locaux
-
-4.2 Messagerie locale
-
-Une messagerie simulée permettant d’échanger des messages entre utilisateurs fictifs.
-
-Fonctionnalités possibles :
-
-    envoi de messages
-
-    réception de messages
-
-    historique des conversations
-
-4.3 REPERTOIRE DE CONTACTS
-
-Une application permettant de gérer un carnet d’adresses.
-
-Fonctionnalités :
-
-    ajout d’un contact
-
-    modification d’un contact
-
-    suppression d’un contact
-
-    recherche de contacts
-
-Informations stockées :
-
-    nom
-
-    prénom
-
-    numéro de téléphone
-
-    adresse e-mail (optionnelle)
-
-4.4 APPLICATION DE PRISE DE NOTES
+4.1 APPLICATION DE PRISE DE NOTES
 
 Un module simple permettant de rédiger et conserver des notes.
 
@@ -124,7 +74,7 @@ Fonctionnalités :
 
     sauvegarde locale
 
-4.5 CHRNOMETRE ET MINUTEUR
+4.2 CHRNOMETRE ET MINUTEUR
 
 Un outil de gestion du temps.
 
@@ -138,7 +88,7 @@ Fonctionnalités :
 
     définir un minuteur avec alerte
 
-4.6 JEUX INTEGRES
+4.3 JEUX INTEGRES
 
 Le navigateur proposera également des jeux simples.
 
@@ -164,37 +114,10 @@ Fonctionnalités :
 
     détection des collisions
 
++ d'autres jeux et applications (calculatrice, simon, chatbot)
+
 5. ARCHITECTURE DU PROJET
 
 Afin de faciliter la maintenance et le travail collaboratif, le projet devra être organisé de manière modulaire.
 
-Exemple de structure :
 
-local_browser/
-│
-├── src/
-│   ├── main.py
-│   │
-│   ├── interface/
-│   │   └── navigateur.py
-│   │
-│   ├── applications/
-│   │   ├── wikipedia.py
-│   │   ├── messagerie.py
-│   │   ├── notes.py
-│   │   ├── contacts.py
-│   │   └── chronometre.py
-│   │
-│   └── jeux/
-│       ├── morpion.py
-│       └── snake.py
-│
-├── data/
-│   ├── articles/
-│   ├── notes/
-│   └── contacts/
-
-
-profils utilisateurs
-
-VOIR POUR FAIRE UNE CACULATRICE haaha

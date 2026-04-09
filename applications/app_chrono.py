@@ -14,9 +14,6 @@ class frame_Chrono(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        # =============================
-        # 🔹 VARIABLES
-        # =============================
         self.en_cours = False
         self.temps = 0
         self.debut = 0
@@ -25,9 +22,6 @@ class frame_Chrono(ctk.CTkFrame):
         self.temps_jeu = 0
         self.debut_jeu = 0
 
-        # =============================
-        # 🔹 MENU
-        # =============================
         self.menu = ctk.CTkFrame(self, fg_color=couleur_Fond)
         self.menu.pack(fill="both", expand=True)
 
@@ -35,7 +29,8 @@ class frame_Chrono(ctk.CTkFrame):
             self.menu, text="Chronomètre",
             command=self.afficher_chrono,
             fg_color=couleur_Bouton,
-            hover_color=couleur_Surbrillance
+            hover_color=couleur_Surbrillance,
+            text_color=couleur_Texte
         )
         self.btn_chrono.pack(pady=40)
 
@@ -43,13 +38,11 @@ class frame_Chrono(ctk.CTkFrame):
             self.menu, text="Jeu 10 secondes",
             command=self.afficher_jeu,
             fg_color=couleur_Bouton,
-            hover_color=couleur_Surbrillance
+            hover_color=couleur_Surbrillance,
+            text_color=couleur_Texte
         )
         self.btn_jeu.pack(pady=20)
 
-        # =============================
-        # 🔹 CHRONO
-        # =============================
         self.chrono = ctk.CTkFrame(self, fg_color=couleur_Fond)
 
         self.label_chrono = ctk.CTkLabel(
@@ -64,9 +57,6 @@ class frame_Chrono(ctk.CTkFrame):
         ctk.CTkButton(self.chrono, text="Reset", command=self.reset).pack(pady=10)
         ctk.CTkButton(self.chrono, text="Retour", command=self.retour_menu).pack(pady=20)
 
-        # =============================
-        # 🔹 JEU 10 SECONDES
-        # =============================
         self.jeu10 = ctk.CTkFrame(self, fg_color=couleur_Fond)
 
         self.label_jeu = ctk.CTkLabel(
@@ -82,9 +72,6 @@ class frame_Chrono(ctk.CTkFrame):
         ctk.CTkButton(self.jeu10, text="Reset", command=self.reset_jeu).pack(pady=10)
         ctk.CTkButton(self.jeu10, text="Retour", command=self.retour_menu_jeu).pack(pady=20)
 
-    # =============================
-    # 🔹 NAVIGATION
-    # =============================
     def afficher_chrono(self):
         self.menu.pack_forget()
         self.chrono.pack(fill="both", expand=True)
@@ -101,9 +88,6 @@ class frame_Chrono(ctk.CTkFrame):
         self.jeu10.pack_forget()
         self.menu.pack(fill="both", expand=True)
 
-    # =============================
-    # 🔹 CHRONO
-    # =============================
     def update(self):
         if self.en_cours:
             t = (time.time() - self.debut) + self.temps
@@ -127,9 +111,6 @@ class frame_Chrono(ctk.CTkFrame):
         self.debut = 0
         self.label_chrono.configure(text="0.000 s")
 
-    # =============================
-    # 🔹 JEU 10 SECONDES
-    # =============================
     def update_jeu(self):
         if self.en_cours_jeu:
             t = (time.time() - self.debut_jeu) + self.temps_jeu

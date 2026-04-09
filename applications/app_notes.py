@@ -1,10 +1,11 @@
 from customtkinter import *
 from CTkListbox import CTkListbox
+import local.customtkinter_modifie as tb_modif
 from tkinter import PhotoImage
 import os
 from PIL import Image
 import json
-from user import app_User
+from local.user import app_User
 
 black = "gray90"
 white = "gray15"
@@ -149,11 +150,14 @@ class frame_Notes(CTkFrame):
         self.button_agrandirTexte.grid(row=2,column=1,padx=(145,0),pady=2,sticky='w') 
         
         self.button_barre = CTkButton(self.editeurParametres,text="a",font=CTkFont("Arial", 18,"normal","roman",0,1),height=25,width=25,text_color=couleur_Texte1,fg_color=couleur_Fond,hover_color=couleur_Surbrillance,command=lambda:self.changement_barre())
-        self.button_barre.grid(row=1,column=1,padx=(0,0),pady=2,sticky="w")      
+        self.button_barre.grid(row=1,column=1,padx=(0,0),pady=2,sticky="w")   
+        
+        self.button_bold = CTkButton(self.editeurParametres,text="B",font=CTkFont("Arial", 18,"bold","roman",0,0),height=25,width=25,text_color=couleur_Texte1,fg_color=couleur_Fond,hover_color=couleur_Surbrillance,command=lambda:self.changement_bold())
+        self.button_bold.grid(row=1,column=1,padx=(28,0),pady=2,sticky="w")      
     
         ## PAGE 
         
-        self.textbox_Page = CTkTextbox(self)
+        self.textbox_Page = tb_modif.CTkTextbox(self)
         self.textbox_Page.configure(corner_radius=0,fg_color="white",text_color="white",border_width=3,border_color=couleur_Texte1)
         
         self.textbox_Page._textbox.configure(insertbackground="black",insertborderwidth=2)
@@ -300,7 +304,7 @@ class frame_Notes(CTkFrame):
         self.label_ErreurOuvert = CTkLabel(self.frame_Ouvrir,text='',text_color="red")
         self.label_ErreurOuvert.grid(row=2,column=0,sticky="sw",padx=(50,0))        
         
-    
+        self.textbox_Page.bind("<<Paste>>", self.on_paste)
         
         self.masquer_frame_event("event")
         
@@ -322,69 +326,167 @@ class frame_Notes(CTkFrame):
         else :
             self.c = 0
 
-        
-    def changement_couleur(self,couleur) :
-        self.tag = couleur
-        self.c = 0  
+    def changement_italic(self):
+        self.c = 0
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_selection = self.font.replace("roman", "italic") if "roman" in self.font else self.font.replace("italic", "roman")
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            if "roman" in self.font:
+                self.font = self.font.replace("roman", "italic")
+                self.button_italic.configure(fg_color=couleur_Bouton2)
+            else:
+                self.font = self.font.replace("italic", "roman")
+                self.button_italic.configure(fg_color=couleur_Fond)
+
+    def changement_italic(self):
+        self.c = 0
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_base = self.get_font_selection(debut)
+            font_selection = font_base.replace("roman", "italic") if "roman" in font_base else font_base.replace("italic", "roman")
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            if "roman" in self.font:
+                self.font = self.font.replace("roman", "italic")
+                self.button_italic.configure(fg_color=couleur_Bouton2)
+            else:
+                self.font = self.font.replace("italic", "roman")
+                self.button_italic.configure(fg_color=couleur_Fond)
+
+    def changement_souligne(self):
+        self.c = 0
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_base = self.get_font_selection(debut)
+            font_selection = font_base[:-3] + "1" + font_base[-2:] if font_base[-3] == "0" else font_base[:-3] + "0" + font_base[-2:]
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            if self.font[-3] == "0":
+                self.font = self.font[:-3] + "1" + self.font[-2:]
+                self.button_souligne.configure(fg_color=couleur_Bouton2)
+            else:
+                self.font = self.font[:-3] + "0" + self.font[-2:]
+                self.button_souligne.configure(fg_color=couleur_Fond)
+
+    def changement_barre(self):
+        self.c = 0
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_base = self.get_font_selection(debut)
+            font_selection = font_base[:-1] + "1" if font_base[-1] == "0" else font_base[:-1] + "0"
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            if self.font[-1] == "0":
+                self.font = self.font[:-1] + "1"
+                self.button_barre.configure(fg_color=couleur_Bouton2)
+            else:
+                self.font = self.font[:-1] + "0"
+                self.button_barre.configure(fg_color=couleur_Fond)
+
+    def changement_bold(self):
+        self.c = 0
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_base = self.get_font_selection(debut)
+            font_selection = font_base.replace("normal", "bold") if "normal" in font_base else font_base.replace("bold", "normal")
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            if "normal" in self.font:
+                self.font = self.font.replace("normal", "bold")
+                self.button_bold.configure(fg_color=couleur_Bouton2)
+            else:
+                self.font = self.font.replace("bold", "normal")
+                self.button_bold.configure(fg_color=couleur_Fond)
+
+    def changement_police(self, police):
+        self.c = 0
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_base = self.get_font_selection(debut)
+            font_selection = font_base
+            for i in self.liste_police:
+                if i in font_base:
+                    font_selection = font_base.replace(i, police)
+                    break
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            for i in self.liste_police:
+                if i in self.font:
+                    self.font = self.font.replace(i, police)
+
+    def changement_couleur(self, couleur):
+        self.c = 0
         self.masquer_frame(self.frame_Couleur)
-        self.button_chtCouleur.configure(text_color=couleur)
-        
-    def changement_couleurFond(self,couleur) :
-        self.background ="background_" + couleur
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            self.appliquer_tag_selection(debut, fin, couleur, "couleur")
+        except:
+            self.tag = couleur
+            self.button_chtCouleur.configure(text_color=couleur)
+
+    def changement_couleurFond(self, couleur):
         self.c = 0
         self.masquer_frame(self.frame_CouleurFond)
-        
-    def changement_italic(self) :
-        self.c = 0
-        if "roman" in self.font :
-            self.font = self.font.replace("roman","italic")
-            self.button_italic.configure(fg_color = couleur_Bouton2)
-        else :
-            self.font = self.font.replace("italic","roman")
-            self.button_italic.configure(fg_color = couleur_Fond)
-    
-    def changement_souligne(self) :
-        self.c = 0
-        if self.font[-3] == "0" :
-            self.font = self.font[:-3] + "1" + self.font[-2:]
-            self.button_souligne.configure(fg_color = couleur_Bouton2)
-        else :
-            self.font = self.font[:-3] + "0" + self.font[-2:]
-            self.button_souligne.configure(fg_color = couleur_Fond)  
-            
-    def changement_police(self,police) :
-        self.c = 0
-        for i in self.liste_police :
-            if i in self.font :
-                self.font = self.font.replace(i,police)
-                
-    def changement_taille(self,taille) :
-        self.c = 0
-        if taille == "+" :
-            for i in range(len(self.liste_taille_str)) :
-                if "0" + self.liste_taille_str[i] in self.font and self.liste_taille_str[i] != '54' :
-                    self.font = self.font.replace("0" + self.liste_taille_str[i], "0" + self.liste_taille_str[i+1])
-                    self.option_Taille.set(self.liste_taille_str[i+1])
-                    return
-        elif taille == '-' :
-            for i in range(len(self.liste_taille_str)) :
-                if "0" + self.liste_taille_str[i] in self.font and self.liste_taille_str[i] != '6'  :
-                    self.font = self.font.replace("0" + self.liste_taille_str[i], "0" + self.liste_taille_str[i-1])
-                    self.option_Taille.set(self.liste_taille_str[i-1])
-                    return 
-        else :
-            for i in self.liste_taille_str :
-                if "0" + i in self.font :
-                    self.font = self.font.replace("0" + i, "0" + taille)
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            self.appliquer_tag_selection(debut, fin, "background_" + couleur, "fond")
+            # Ne pas changer self.background
+        except:
+            self.background = "background_" + couleur
 
-    def changement_barre(self) :
+    def changement_taille(self, taille):
         self.c = 0
-        if self.font[-1] == "0" :
-            self.font = self.font[:-1] + "1" 
-            self.button_barre.configure(fg_color = couleur_Bouton2)
-        else :
-            self.font = self.font[:-1] + "0" 
-            self.button_barre.configure(fg_color = couleur_Fond)            
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+            font_base = self.get_font_selection(debut)
+            font_selection = font_base
+            if taille == "+":
+                for i in range(len(self.liste_taille_str)):
+                    if "0" + self.liste_taille_str[i] in font_base and self.liste_taille_str[i] != '54':
+                        font_selection = font_base.replace("0" + self.liste_taille_str[i], "0" + self.liste_taille_str[i+1])
+                        self.option_Taille.set(self.liste_taille_str[i+1])  # ← ajout
+                        break
+            elif taille == '-':
+                for i in range(len(self.liste_taille_str)):
+                    if "0" + self.liste_taille_str[i] in font_base and self.liste_taille_str[i] != '6':
+                        font_selection = font_base.replace("0" + self.liste_taille_str[i], "0" + self.liste_taille_str[i-1])
+                        self.option_Taille.set(self.liste_taille_str[i-1])  # ← ajout
+                        break
+            else:
+                for i in self.liste_taille_str:
+                    if "0" + i in font_base:
+                        font_selection = font_base.replace("0" + i, "0" + taille)
+                self.option_Taille.set(taille)  
+            self.appliquer_tag_selection(debut, fin, font_selection, "font")
+        except:
+            if taille == "+":
+                for i in range(len(self.liste_taille_str)):
+                    if "0" + self.liste_taille_str[i] in self.font and self.liste_taille_str[i] != '54':
+                        self.font = self.font.replace("0" + self.liste_taille_str[i], "0" + self.liste_taille_str[i+1])
+                        self.option_Taille.set(self.liste_taille_str[i+1])
+                        break
+            elif taille == '-':
+                for i in range(len(self.liste_taille_str)):
+                    if "0" + self.liste_taille_str[i] in self.font and self.liste_taille_str[i] != '6':
+                        self.font = self.font.replace("0" + self.liste_taille_str[i], "0" + self.liste_taille_str[i-1])
+                        self.option_Taille.set(self.liste_taille_str[i-1])
+                        break
+            else:
+                for i in self.liste_taille_str:
+                    if "0" + i in self.font:
+                        self.font = self.font.replace("0" + i, "0" + taille)
+                self.option_Taille.set(taille)
         
     def show_frame(self,frame) :
         if frame == self.frame_Couleur :
@@ -504,7 +606,7 @@ class frame_Notes(CTkFrame):
                 
     def supprimer_fichier(self) :
         if self.lb_Fichiers.get() and self.lb_Fichiers.get() != self.fichier_ouvert :
-            os.remove(app_User.path + f'notes/{self.lb_Fichiers.get()}.json')
+            os.remove(app_User.path + f'/notes/{self.lb_Fichiers.get()}.json')
             self.lb_Fichiers.delete(0,"END")
             fichier = os.listdir(app_User.path + "/notes")
             for i in fichier : 
@@ -512,3 +614,45 @@ class frame_Notes(CTkFrame):
         elif self.lb_Fichiers.get() and self.lb_Fichiers.get() == self.fichier_ouvert :
             self.label_ErreurOuvert.configure(text="Suppression impossible. Fichier ouvert")
             
+    def appliquer_tag_selection(self, debut, fin, nouveau_tag, type_tag):
+        if type_tag == "font":
+            for police in self.liste_police:
+                for taille in self.liste_taille_str:
+                    for epaisseur in self.liste_epaisseur:
+                        for slant in self.liste_slant:
+                            for underline in self.liste_underline:
+                                for overstrike in self.liste_overstrike:
+                                    tag = police + "+" + "0" + taille + "+" + epaisseur + "+" + slant + "+" + str(underline) + "+" + str(overstrike)
+                                    self.textbox_Page.tag_remove(tag, debut, fin)
+        elif type_tag == "couleur":
+            for i in range(len(self.tableau_couleurs)):
+                for j in range(len(self.tableau_couleurs[0])):
+                    self.textbox_Page.tag_remove(self.tableau_couleurs[i][j], debut, fin)
+        elif type_tag == "fond":
+            for bg in self.liste_background:
+                self.textbox_Page.tag_remove("background_" + bg, debut, fin)
+
+        self.textbox_Page.tag_add(nouveau_tag, debut, fin)
+        
+    def get_font_selection(self, debut):
+        tags = self.textbox_Page.tag_names(debut)
+        for tag in tags:
+            for police in self.liste_police:
+                if tag.startswith(police + "+"):
+                    return tag
+        return self.font
+    
+    def on_paste(self, event):
+        self.after(10, self._appliquer_tags_apres_paste)
+
+    def _appliquer_tags_apres_paste(self):
+        try:
+            debut = self.textbox_Page.index("sel.first")
+            fin = self.textbox_Page.index("sel.last")
+        except:
+            fin = self.textbox_Page.index("insert")
+            debut = self.textbox_Page.index(f"insert - {len(self.winfo_toplevel().clipboard_get())}c")
+        
+        self.textbox_Page.tag_add(self.tag, debut, fin)
+        self.textbox_Page.tag_add(self.font, debut, fin)
+        self.textbox_Page.tag_add(self.background, debut, fin)
