@@ -20,7 +20,11 @@ class frame_Morpion(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
-
+        self.grid_rowconfigure(0,weight=1)
+        self.grid_rowconfigure(1,weight=1)
+        self.grid_rowconfigure(2,weight=1)
+        self.grid_columnconfigure(0,weight=1)
+    
         # 🔹 Variables (IMPORTANT : plus de global)
         self.tab1 = [[0,0,0],[0,0,0],[0,0,0]]
         self.tour = 1
@@ -145,15 +149,70 @@ class frame_Morpion(ctk.CTkFrame):
     def coup_aleatoire(self):
         cases = [(i,j) for i in range(3) for j in range(3) if self.tab1[i][j]==0]
         return random.choice(cases) if cases else None
+   
+   
+    
+    
+    def imbattable(self, profondeur, est_max):
+        if self.victoire_test(2):
+            return 10 - profondeur
+        if self.victoire_test(1):
+            return profondeur - 10
+        if self.egalite_test():
+            return 0
+
+        if est_max:  
+            meilleur = -float("inf")
+            for i in range(3):
+                for j in range(3):
+                    if self.tab1[i][j] == 0:
+                        self.tab1[i][j] = 2
+                        score = self.imbattable(profondeur+1, False)
+                        self.tab1[i][j] = 0
+                        meilleur = max(meilleur, score)
+            return meilleur
+
+        else:  
+            meilleur = float("inf")
+            for i in range(3):
+                for j in range(3):
+                    if self.tab1[i][j] == 0:
+                        self.tab1[i][j] = 1
+                        score = self.imbattable(profondeur+1, True)
+                        self.tab1[i][j] = 0
+                        meilleur = min(meilleur, score)
+            return meilleur
+        
+    def meilleur_coup(self):
+        meilleur_score = -float("inf")
+        coup = None
+
+        for i in range(3):
+            for j in range(3):
+                if self.tab1[i][j] == 0:
+                    self.tab1[i][j] = 2
+                    score = self.imbattable(0, False)
+                    self.tab1[i][j] = 0
+
+                    if score > meilleur_score:
+                        meilleur_score = score
+                        coup = (i, j)
+
+        return coup
 
     def ordinateur(self):
-        coup = self.coup_aleatoire()
+        if random.random() < 0.2:
+            coup = self.coup_aleatoire()
+        else:
+            coup = self.meilleur_coup()
         if coup:
             self.joueur2.configure(border_color="aquamarine4")
             self.joueur1.configure(border_color=couleur_Texte1)
-            i,j = coup
+
+            i, j = coup
             self.tab1[i][j] = 2
-            self.dessiner_x(i,j)
+            self.dessiner_x(i, j)
+
             self.tour = 1
             self.verifVictoire(2)
             

@@ -1,0 +1,18 @@
+[
+    {
+        "role": "user",
+        "content": "Salut\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Salut. Comment puis-je vous aider aujourd'hui ?"
+    },
+    {
+        "role": "user",
+        "content": "Salut\n"
+    },
+    {
+        "role": "assistant",
+        "content": "Salut à nouveau. Qu'est-ce qui se passe ? Vous voulez discuter de quelque chose en particulier ou simplement échanger quelques mots ?"
+    }
+]
